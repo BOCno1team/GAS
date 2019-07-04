@@ -20,9 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 public class HelloServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-    /**
-     * Default constructor. 
-     */
+
     public HelloServlet() {
         // TODO Auto-generated constructor stub
     }
@@ -41,13 +39,28 @@ public class HelloServlet extends HttpServlet {
 		BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream(),"utf-8"));
 		String line = null;
 		StringBuilder sb = new StringBuilder();
+		//这里读出来的字符串时JSON格式的
 		while ((line = br.readLine()) != null) {
 			sb.append(line);
 		}
 		//将json字符串转换为json对象
-		JSONObject json=JSONObject.parseObject(sb.toString());
-		//System.out.println(json.toString());
-		out.write("res");
+		JSONObject json = JSONObject.parseObject(sb.toString());
+		//获取JSON中的内容，此处取id对应的内容
+		String jsonStr = json.getString("id");
+		System.out.println(jsonStr);
+		
+		//TODO
+		/**
+		 * 需要在这里加入各种处理逻辑，以前端JSON中获取的内容为输入，调用撮合算法或是信息发布等功能，
+		 * 并获取返回值（全部基于java对象进行操作）
+		 * */
+		
+		
+		//组织返回的内容
+		json = new JSONObject();
+		json.put("res", "aaa"+jsonStr);
+		//将JSON返回前端
+		out.append(json.toString());
 	}
 
 	/**

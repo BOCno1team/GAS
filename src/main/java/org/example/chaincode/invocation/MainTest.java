@@ -43,11 +43,11 @@ public class MainTest {
 		
 		
 		UserContext userContext = new UserContext();
-		userContext.setName("peer4");
+		userContext.setName("peer5");
 		userContext.setAffiliation("org1");
 		userContext.setMspId("org1msp");
 
-		RegistrationRequest rr = new RegistrationRequest("peer4", "org1");
+		RegistrationRequest rr = new RegistrationRequest("peer5", "org1");
 		String enrollmentSecret = hfcaClient.register(rr, adminUserContext);
 		Enrollment enrollment = hfcaClient.enroll(userContext.getName(), enrollmentSecret);
 		userContext.setEnrollment(enrollment);
