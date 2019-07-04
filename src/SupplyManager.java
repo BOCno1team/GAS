@@ -69,7 +69,7 @@ public class SupplyManager {
 		double unitPrice = 0;
 		int providerRank = 0;
 		try {
-			jsonStr = queryHelper.query(chainCode, "queryUnproByName", args);
+			jsonStr = queryHelper.query(chainCode, "queryProByName", args);
 			JSONArray jsonArr = JSONObject.parseArray(jsonStr);
 			for (int i = 0 ; i < jsonArr.size() ; i++){
 				jsonObj = jsonArr.getJSONObject(i);
@@ -79,7 +79,7 @@ public class SupplyManager {
 				amount = jsonObj.getIntValue("amount");
 				unit = jsonObj.getString("unit");
 				providerId = jsonObj.getIntValue("organization");
-				unitPrice = jsonObj.getDoubleValue("unitPrice");
+				unitPrice = jsonObj.getDoubleValue("unitprice");
 				providerRank = Organization.getRankById(providerId);
 				resultList.add(new ProfitableSupply(supplyId,name,amount,unit,providerId,unitPrice,providerRank));
 			}
@@ -170,14 +170,13 @@ public class SupplyManager {
 		List<ProfitableSupply> profitableSupplyPool = getProfitableSupplyList(resourceName);
 		Collections.sort(profitableSupplyPool);
 
-		for (ProfitableSupply s : profitableSupplyPool) {
+		for (ProfitableSupply s : profitableSupplyPool) {			
 			if (sum == amountNeeded) {
 				break;
 			}
 
 			int amountStillNeeded = amountNeeded - sum;		
 			int amountUsed = (int) (s.getAmount() > amountStillNeeded ? amountStillNeeded : s.getAmount());
-			
 			sum += amountUsed;
 			price += amountUsed * s.getUnitPrice();
 		}

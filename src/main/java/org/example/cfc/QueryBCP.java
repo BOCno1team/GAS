@@ -79,7 +79,6 @@ public class QueryBCP {
 		queryRequest.setChaincodeID(ccid); // ChaincodeId object as created in Invoke block
 		queryRequest.setFcn(fcnName); // Chaincode function name for querying the blocks
 
-		//String[] arguments = { "htl"}; // Arguments that the above functions take
 		if (queryArgs != null)
 			queryRequest.setArgs(queryArgs);
 		else
@@ -87,20 +86,7 @@ public class QueryBCP {
 		// Query the chaincode  
 		Collection<ProposalResponse> queryResponse = channel.queryByChaincode(queryRequest);
 		String resultStr = queryResponse.iterator().next().getProposalResponse().getResponse().getPayload().toStringUtf8();
-		//												   getProposalResponse().getResponse().getPayload().toStringUtf8();
-		System.out.println("aaaa "+resultStr);
-
-//		for (ProposalResponse proposalResponse : queryResponse) {
-//            if (!proposalResponse.isVerified() || proposalResponse.getStatus() != ProposalResponse.Status.SUCCESS) {
-//                fail("Failed query proposal from peer " + proposalResponse.getPeer().getName() + " status: " + proposalResponse.getStatus() +
-//                        ". Messages: " + proposalResponse.getMessage()
-//                        + ". Was verified : " + proposalResponse.isVerified());
-//            } else {
-//                String payload = proposalResponse.getProposalResponse().getResponse().getPayload().toStringUtf8();
-//                System.out.printf("Query payload of b from peer %s returned %s", proposalResponse.getPeer().getName(), payload);
-//
-//            }
-//        }		
+		System.out.println("get message: "+resultStr);	
 		return resultStr;		
 	}
 	

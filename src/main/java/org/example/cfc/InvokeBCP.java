@@ -78,7 +78,6 @@ public class InvokeBCP {
 
 		request.setChaincodeID(ccid);
 		request.setFcn(fcnName); // Chaincode invoke funtion name
-		//String[] arguments = { "htl","50" }; // Arguments that Chaincode function takes
 		request.setArgs(invokeArgs);
 		request.setProposalWaitTime(30000);
 		Collection<ProposalResponse> responses = channel.sendTransactionProposal(request);
@@ -93,35 +92,16 @@ public class InvokeBCP {
 	public static void main(String[] args) throws Exception{
 		InvokeBCP invoke = new InvokeBCP();
 		QueryBCP query = new QueryBCP();
-		String[] invokeArgs= { "00002", "Milk", "10", "u", "SS"};
+		String[] invokeArgs= { "802", "bread", "150", "kg", "503","3"};
 		String cc = "go_package8";
-		String fcnName = "initUnprofitablesupply";
+		String fcnName = "initProfitablesupply";
 		invoke.invoke(cc,fcnName,invokeArgs);
 		
 		cc = "go_package8";
-		invokeArgs= new String[]{ "milk"};
-		fcnName = "queryUnproByName";
+		invokeArgs= new String[]{ "bread"};
+		fcnName = "queryProByName";
 		query.query(cc,fcnName,invokeArgs);
 		
-//		cc = "go_package5";
-//		System.out.println("2222");
-//		invokeArgs= new String[]{ "00002","milk","50","u","SS","5" };
-//		fcnName = "initProfitablesupply";
-//		m.query(cc,fcnName,invokeArgs);
-//		System.out.println("3333");
-//		invokeArgs= new String[]{ "00003","milk","50","u","SS"};
-//		cc = "go_package5";
-//		fcnName = "initUnprofitablesupply";
-//		m.query(cc,fcnName,invokeArgs);
-//		System.out.println("4444");
-//		invokeArgs= new String[]{ "milk"};
-//		System.out.println("5555");
-//		fcnName = "queryProByName";
-//		m.query(cc,fcnName,invokeArgs);
-//		System.out.println("6666");
-//		invokeArgs= new String[]{ "SS"};
-//
-//		fcnName = "queryUnproByOrganization";
-//		m.query(cc,fcnName,invokeArgs);
+
 	}
 }
