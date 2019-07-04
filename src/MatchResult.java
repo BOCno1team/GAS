@@ -15,6 +15,22 @@ public class MatchResult {
 	
 	private final static String chainCode = "go_package8";
 	
+	public static void main(String[] args) {
+		//initOneFeedback(501);
+		
+		String key = Integer.toString(1)+"-"+Integer.toString(501);
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[]{key}; 
+
+		try {
+			String jsonStr = query.query("go_package2","query", queryArgs);
+			System.out.println(jsonStr);
+	   } catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public MatchResult(Demand demand, List<Supply> unprofitableList, List<Supply> profitableList,
 			List<Supply> fundList, double sumGethered) {
 		super();
@@ -31,7 +47,7 @@ public class MatchResult {
 		String[] queryArgs = new String[]{key}; 
 
 		try {
-			String jsonStr = query.query(chainCode,"query", queryArgs);
+			String jsonStr = query.query("go_package2","query", queryArgs);
 			JSONObject json = JSONObject.parseObject(jsonStr);
 			int sum1 = json.getIntValue("grade1");
 			int sum2 = json.getIntValue("grade2");
@@ -80,21 +96,21 @@ public class MatchResult {
 				
 		List<Integer> orgList = new ArrayList<Integer>();
 		for (Supply s : unprofitableList) {
-			if (orgId != s.getProviderId() && !orgList.contains(s) && 
+			if (orgId != s.getProviderId() && !orgList.contains(s.getProviderId()) && 
 					Organization.getTypeById(s.getProviderId())!=orgType) {
 				orgList.add(s.getProviderId());	
 			}
 		}
 		
 		for (Supply s : profitableList) {
-			if (orgId != s.getProviderId() && !orgList.contains(s) && 
+			if (orgId != s.getProviderId() && !orgList.contains(s.getProviderId()) && 
 					Organization.getTypeById(s.getProviderId())!=orgType) {
 				orgList.add(s.getProviderId());		
 			}
 		}
 		
 		for (Supply s : fundList) {
-			if (orgId != s.getProviderId() && !orgList.contains(s) && 
+			if (orgId != s.getProviderId() && !orgList.contains(s.getProviderId()) && 
 					Organization.getTypeById(s.getProviderId())!=orgType) {
 				orgList.add(s.getProviderId());		
 			}
@@ -128,8 +144,11 @@ public class MatchResult {
 	}
 	
 	public void initOneFeedback(int receiverId) {
-		String key = Integer.toString(this.demand.getDemandId())+"-"+Integer.toString(receiverId);
+		String key = Integer.toString(this.demand.getDemandId())+"-"+Integer.toString(receiverId); //////////1
+		//String key = "1501";
 		JSONObject initialGrade = new JSONObject();
+		//////////////int total = calculateNumOfMembers(receiverId);
+		int total =5;
 		
 		initialGrade.put("grade1", 0);
 		initialGrade.put("grade2", 0);
@@ -137,14 +156,14 @@ public class MatchResult {
 		initialGrade.put("grade4", 0);
 		initialGrade.put("grade5", 0);
 		initialGrade.put("count", 0);
-		initialGrade.put("total", initialGrade);
+		initialGrade.put("total", total);
 		
 		String initialGradeString = JSONObject.toJSONString(initialGrade);
 		String[] invokeArgs = new String[]{key, initialGradeString};
 		
 		try {
 			InvokeBCP invoke = new InvokeBCP();
-			invoke.invoke(chainCode,"set",invokeArgs);
+			invoke.invoke("go_package2","set",invokeArgs);
 		} catch (Exception e) {
 					// TODO Auto-generated catch block
 			e.printStackTrace();

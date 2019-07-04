@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import main.java.org.example.cfc.InvokeBCP;
+
 public class Demand implements Comparable<Demand>, Serializable {
 	private int demandId;
 	private String name;
@@ -14,7 +16,7 @@ public class Demand implements Comparable<Demand>, Serializable {
 	private int priority; // range from 1 to 3 to represent the urgency.
 	private int DemanderId;
 
-	private static int currentDemandId = 1;
+	private final static String chainCode = "go_package8";
 	private static final long serialVersionUID = 20190625050327L;
 
 	public static void main(String[] args) {	
@@ -25,7 +27,7 @@ public class Demand implements Comparable<Demand>, Serializable {
 		int demandId = 1;
 		String name = "bread";
 		String category = "Food";
-		int amountNeeded = 850;
+		int amountNeeded = 900;
 		String unit = "kg";
 		int priority = 1;
 		Demand d1 = new Demand(demandId, name, category, amountNeeded, unit, priority);
@@ -66,6 +68,31 @@ public class Demand implements Comparable<Demand>, Serializable {
 		
 		s3.setAmount(200);
 		s3.updateUnprofitableSupply();
+		
+		InvokeBCP invoke = new InvokeBCP();
+		String[] invokeArgs = new String[]{String.valueOf(703),String.valueOf(300)};
+		try {
+			invoke.invoke(chainCode,"updateProfitablesupplyamount",invokeArgs);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String[] invokeArgs1 = new String[]{String.valueOf(801),String.valueOf(100)};
+		try {
+			invoke.invoke(chainCode,"updateUnprofitablesupplyamount",invokeArgs1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String[] invokeArgs2 = new String[]{String.valueOf(802),String.valueOf(150)};
+		try {
+			invoke.invoke(chainCode,"updateProfitablesupplyamount",invokeArgs2);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		MatchResult result = d1.matchToSupply();
 		result.getFeedbackOrgs(503);
