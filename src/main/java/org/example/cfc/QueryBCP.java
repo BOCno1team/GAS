@@ -24,13 +24,15 @@ public class QueryBCP {
 	private static UserContext adminUserContext = null;
 	private static CryptoSuite cryptoSuite = null;
 	private static HFClient hfClient = null;
+	private static Channel channel = null;
 	private static Channel initChannel() throws Exception{
 		adminUserContext = Util.readUserContext("org1", "ca");
 		cryptoSuite = CryptoSuite.Factory.getCryptoSuite();
 		hfClient = HFClient.createNewInstance();
 		hfClient.setCryptoSuite(cryptoSuite);
 		hfClient.setUserContext(adminUserContext);
-		
+		if(null != channel) 
+			return channel;
 		String peer_name = "Peer Org1";
 		String peer_url = "grpcs://184.172.214.135:30603"; // Ensure that port is of peer1
 		//String pemStr = "-----BEGIN CERTIFICATE-----\nMIICITCCAcigAwIBAgIUKa3+XMvoLwc7wxP0nZDr+re8rgswCgYIKoZIzj0EAwIw\nYjELMAkGA1UEBhMCVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQK\nEwtIeXBlcmxlZGdlcjEPMA0GA1UECxMGRmFicmljMRMwEQYDVQQDEwpPcmcxQ0Et\ndGxzMB4XDTE5MDYyNTA1MzcwMFoXDTM0MDYyMTA1MzcwMFowYjELMAkGA1UEBhMC\nVVMxFzAVBgNVBAgTDk5vcnRoIENhcm9saW5hMRQwEgYDVQQKEwtIeXBlcmxlZGdl\ncjEPMA0GA1UECxMGRmFicmljMRMwEQYDVQQDEwpPcmcxQ0EtdGxzMFkwEwYHKoZI\nzj0CAQYIKoZIzj0DAQcDQgAE5vo/s6vZyAsAVf6j5Wrl/wGVGdvlVgZ0OfvuJQBx\nuHxd82c9YqT71YGgZhn0X+xIKGvx3DT21Q4x9RUR+H6+5qNcMFowDgYDVR0PAQH/\nBAQDAgEGMBIGA1UdEwEB/wQIMAYBAf8CAQEwHQYDVR0OBBYEFAO34fp2LeT/74yu\nwymuI51GrKPCMBUGA1UdEQQOMAyHBLis1oeHBApMwakwCgYIKoZIzj0EAwIDRwAw\nRAIgRY2fyDj6TgQj3UFrP2EVoSl44fQxw6qOIV5bbLJsgsYCIBXZ3PGbrcVODiP5\n564q4uwmyHk+jk/s+AgBboBSmTCK\n-----END CERTIFICATE-----";
@@ -61,7 +63,7 @@ public class QueryBCP {
 
 		Orderer orderer = hfClient.newOrderer(orderer_name, orderer_url, orderer_properties);
 //////////////////////////////////////order	 end	
-		Channel channel = hfClient.newChannel("channel1");
+		channel = hfClient.newChannel("channel1");
 
 		channel.addPeer(peer);
 		 //channel.addEventHub(eventHub);
@@ -73,7 +75,7 @@ public class QueryBCP {
 	
 	//execute invoke 
 	public String query(String chainCodeName, String fcnName, String[] queryArgs) throws Exception{
-		Channel channel = initChannel();
+		channel = initChannel();
 		QueryByChaincodeRequest queryRequest = hfClient.newQueryProposalRequest();
 		ChaincodeID ccid = ChaincodeID.newBuilder().setName(chainCodeName).build();
 		queryRequest.setChaincodeID(ccid); // ChaincodeId object as created in Invoke block
