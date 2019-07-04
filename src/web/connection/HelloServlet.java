@@ -20,9 +20,7 @@ import com.alibaba.fastjson.JSONObject;
 public class HelloServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-    /**
-     * Default constructor. 
-     */
+
     public HelloServlet() {
         // TODO Auto-generated constructor stub
     }
