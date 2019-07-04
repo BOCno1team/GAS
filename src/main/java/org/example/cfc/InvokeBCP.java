@@ -83,10 +83,10 @@ public class InvokeBCP {
 		request.setArgs(invokeArgs);
 		request.setProposalWaitTime(30000);
 		Collection<ProposalResponse> responses = channel.sendTransactionProposal(request);
-		for (ProposalResponse res : responses) {
-			System.out.println(res.getMessage());
-			System.out.println(res.getTransactionID());
-		}
+//		for (ProposalResponse res : responses) {
+//			System.out.println(res.getMessage());
+//			System.out.println(res.getTransactionID());
+//		}
 		CompletableFuture<TransactionEvent> cf = channel.sendTransaction(responses);
 		//System.out.println(responses.iterator().next().getProposalResponse().getResponse().getPayload().toStringUtf8());		 
 		return null;		

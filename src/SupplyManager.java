@@ -150,7 +150,7 @@ public class SupplyManager {
 			s.deductAmount(amountUsed);
 			s.updateUnprofitableSupply();
 			
-			System.out.println(String.format("%s provided %f amount", s.getProviderId(), amountUsed));
+			System.out.println("UNPROFITABLE: "+s.getProviderId()+" provided "+amountUsed+" amount");
 		}
 		
 		return supplyList;
@@ -224,12 +224,16 @@ public class SupplyManager {
 			fundLeft -= amountUsed * s.getUnitPrice();
 			s.deductAmount(amountUsed);
 			s.updateProfitableSupply();
+			System.out.println("PROFITABLE: "+s.getProviderId()+" provided "+amountUsed+" amount");
 		}
 		
 		return supplyList;
 	}
+	
+	
+	
 	public static void main(String[] args) throws Exception{
-		getUnprofitableSupplyList("milk");
+		
 	}
 }
 

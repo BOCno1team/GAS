@@ -26,9 +26,10 @@ public class Organization {
 	
 	public void initOrganization(int orgId, String name, int score, int rank, String orgType) {
 		InvokeBCP invoke = new InvokeBCP();
-		String[] invokeArgs = new String[]{String.valueOf(this.getOrgId()),String.valueOf(this.getScore())};
+		String[] invokeArgs = new String[]{String.valueOf(orgId), name, 
+				String.valueOf(score), String.valueOf(rank), orgType};
 		try {
-			invoke.invoke(chainCode,"updateOrganization",invokeArgs);
+			invoke.invoke(chainCode,"initOrganization",invokeArgs);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -112,7 +113,8 @@ public class Organization {
 	
 	public void updateOrganization(int avg1, int avg2, int avg3, int avg4, int avg5) {
 		InvokeBCP invoke = new InvokeBCP();
-		String[] invokeArgs = new String[]{String.valueOf(this.getOrgId()),String.valueOf(this.getScore())};
+		String[] invokeArgs = new String[]{String.valueOf(this.getOrgId()),
+				String.valueOf(avg1),String.valueOf(avg2),String.valueOf(avg3),String.valueOf(avg4),String.valueOf(avg5)};
 		try {
 			invoke.invoke(chainCode,"updateOrganization",invokeArgs);
 		} catch (Exception e) {

@@ -115,11 +115,7 @@ public class MatchResult {
 				orgList.add(s.getProviderId());		
 			}
 		}
-		
-		System.out.println("-----" + orgId +" should give & get feedback from organizations:----");
-		System.out.println(orgList); //******************
-		
-		
+			
 		return orgList;
 		
 		

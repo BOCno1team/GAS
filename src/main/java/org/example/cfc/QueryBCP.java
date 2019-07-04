@@ -88,7 +88,7 @@ public class QueryBCP {
 		// Query the chaincode  
 		Collection<ProposalResponse> queryResponse = channel.queryByChaincode(queryRequest);
 		String resultStr = queryResponse.iterator().next().getProposalResponse().getResponse().getPayload().toStringUtf8();
-		System.out.println("get message: "+resultStr);	
+		//System.out.println("get message: "+resultStr);	
 		return resultStr;		
 	}
 	

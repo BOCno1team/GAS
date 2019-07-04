@@ -66,11 +66,11 @@ public class Supply implements Comparable<Supply>, Cloneable {
 		return s;
 	}
 	
-	@Override
-	public String toString() {
-		return "Supply [supplyId=" + supplyId + ", name=" + name + ", amount=" + amount + 
-				", with provider rank" + Organization.getRankById(this.providerId) + "]";
-	}
+//	@Override
+//	public String toString() {
+//		return "Supply [supplyId=" + supplyId + ", name=" + name + ", amount=" + amount + 
+//				", with provider rank" + Organization.getRankById(this.providerId) + "]";
+//	}
 
 	public int getSupplyId() {
 		return supplyId;
