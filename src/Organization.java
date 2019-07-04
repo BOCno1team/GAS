@@ -24,7 +24,16 @@ public class Organization {
 		this.orgType = orgType;
 	}
 	
-	
+	public void initOrganization(int orgId, String name, int score, int rank, String orgType) {
+		InvokeBCP invoke = new InvokeBCP();
+		String[] invokeArgs = new String[]{String.valueOf(this.getOrgId()),String.valueOf(this.getScore())};
+		try {
+			invoke.invoke(chainCode,"updateOrganization",invokeArgs);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	public static String getTypeById(int id) {
 		QueryBCP query = new QueryBCP();
@@ -48,13 +57,27 @@ public class Organization {
 		try {
 			String jsonStr = query.query(chainCode,fcnName,queryArgs);
 			JSONObject json = JSONObject.parseObject(jsonStr);
-			System.out.println("id: "+ id + "rank: " + json.getString("rank"));
 			rank = Integer.parseInt(json.getString("rank"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return rank;
+	}
+	
+	public static int getScoreById(int id) {
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[]{Integer.toString(id)};
+		int score = -1;
+		try {
+			String jsonStr = query.query(chainCode,fcnName,queryArgs);
+			JSONObject json = JSONObject.parseObject(jsonStr);
+			score = Integer.parseInt(json.getString("score"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return score;
 	}
 	
 	public static Organization queryOrgById(int id) {
@@ -84,6 +107,8 @@ public class Organization {
 		Organization org = new Organization(orgId, name, score, rank, orgType);
 		return org;
 	}
+	
+	
 	
 	public void updateOrganization(int avg1, int avg2, int avg3, int avg4, int avg5) {
 		InvokeBCP invoke = new InvokeBCP();

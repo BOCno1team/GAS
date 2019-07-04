@@ -76,7 +76,7 @@ public class MatchResult {
 			String newGradeString = JSONObject.toJSONString(newGrade);
 			String[] invokeArgs = new String[]{key, newGradeString};
 			InvokeBCP invoke = new InvokeBCP();
-			invoke.invoke(chainCode,"set",invokeArgs);
+			invoke.invoke("go_package2","set",invokeArgs);
 			
 			if (count == totalCount) {
 				Organization receiver = Organization.queryOrgById(receiverId);				
@@ -147,8 +147,7 @@ public class MatchResult {
 		String key = Integer.toString(this.demand.getDemandId())+"-"+Integer.toString(receiverId); //////////1
 		//String key = "1501";
 		JSONObject initialGrade = new JSONObject();
-		//////////////int total = calculateNumOfMembers(receiverId);
-		int total =5;
+		int total = calculateNumOfMembers(receiverId);
 		
 		initialGrade.put("grade1", 0);
 		initialGrade.put("grade2", 0);

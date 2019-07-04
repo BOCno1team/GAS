@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import main.java.org.example.cfc.InvokeBCP;
+import main.java.org.example.cfc.QueryBCP;
 
 public class Demand implements Comparable<Demand>, Serializable {
 	private int demandId;
@@ -14,7 +15,7 @@ public class Demand implements Comparable<Demand>, Serializable {
 	private int amountNeeded;
 	private String unit;
 	private int priority; // range from 1 to 3 to represent the urgency.
-	private int DemanderId;
+	private int demanderId;
 
 	private final static String chainCode = "go_package8";
 	private static final long serialVersionUID = 20190625050327L;
@@ -94,10 +95,34 @@ public class Demand implements Comparable<Demand>, Serializable {
 			e.printStackTrace();
 		}
 		
+		//********************************************************
 		MatchResult result = d1.matchToSupply();
 		result.getFeedbackOrgs(503);
 		result.prepareForFeedback();
 		result.giveFeedback(1, 503, 5, 5, 5, 5, 5);
+		
+		//print previous result
+		System.out.println("Previous score of org is" + Organization.getScoreById(503));
+		result.giveFeedback(1, 503, 10, 10, 10, 10, 10);
+		
+		
+		
+		//verify result
+		
+		
+		String key = Integer.toString(1)+"-"+Integer.toString(503);
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[]{key}; 
+
+		try {
+			String jsonStr = query.query("go_package2","query", queryArgs);
+			System.out.println(jsonStr);
+	   } catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("new score of org is" + Organization.getScoreById(503));
 	}
 	/*
 	 * The map that matches a category to its corresponding priority.
@@ -119,7 +144,7 @@ public class Demand implements Comparable<Demand>, Serializable {
 	 * @param amount
 	 * @param unit
 	 */
-	public Demand(int demandId, String name, String category, int amount, String unit) {
+	public Demand(int demandId, String name, String category, int amount, String unit, int demanderId) {
 		super();
 		this.demandId = demandId;
 		this.name = name;
@@ -127,6 +152,7 @@ public class Demand implements Comparable<Demand>, Serializable {
 		this.amountNeeded = amount;
 		this.unit = unit;
 		this.priority = priorityForCategoryMap.get(category);
+		this.demanderId = demanderId;
 	}
 
 	/**
@@ -137,13 +163,14 @@ public class Demand implements Comparable<Demand>, Serializable {
 	 * @param unit
 	 * @param priority
 	 */
-	public Demand(int demandId,String name, String category, int amount, String unit, int priority) {
+	public Demand(int demandId,String name, String category, int amount, String unit, int demanderId, int priority) {
 		super();
 		this.demandId = demandId;
 		this.name = name;
 		this.category = category;
 		this.amountNeeded = amount;
 		this.unit = unit;
+		this.demanderId = demanderId;
 		this.priority = priority;
 	}
 
@@ -157,7 +184,8 @@ public class Demand implements Comparable<Demand>, Serializable {
 		List<Supply> unprofitableSupplyList = supplyManager.mapInUnprofitableSupplyPool(this.getName(),
 				this.amountNeeded);
 		double sum = supplyManager.getTotalAmount(unprofitableSupplyList);
-
+		System.out.println("********** matching in unprofitable supply pool **********");
+		
 		double amountStillNeeded = this.amountNeeded - sum;
 		if (amountStillNeeded <= 0) {
 			System.out.println("Unprofitable supply List:\n");
@@ -168,7 +196,8 @@ public class Demand implements Comparable<Demand>, Serializable {
 		// Calculate the price needed to pay for the available resources
 		// in the profitable supply pool.
 		double price = supplyManager.calculatePriceInProfitableSupplyPool(this.getName(), (int) amountStillNeeded);
-	
+		System.out.println("********** calculating price in profitable supply pool **********");
+		
 		// Map in the profitable supply pool with the fund.
 		double fund = price < supplyManager.getTotalFund() ? price : supplyManager.getTotalFund();
 		List<Supply> profitableSupplyList = supplyManager.mapInProfitableSupplyPool(

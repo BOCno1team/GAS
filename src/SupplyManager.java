@@ -112,6 +112,7 @@ public class SupplyManager {
 	}
 	
 	public double getTotalFund() {
+		
 		List<UnprofitableSupply> fundList =  getUnprofitableSupplyList("Fund");
 		
 		double totalFund = fundList.stream().mapToDouble(s -> s.getAmount()).sum();
