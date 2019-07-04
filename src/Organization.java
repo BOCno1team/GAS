@@ -2,6 +2,7 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 
+import main.java.org.example.cfc.InvokeBCP;
 import main.java.org.example.cfc.QueryBCP;
 
 public class Organization {
@@ -23,16 +24,21 @@ public class Organization {
 		this.orgType = orgType;
 	}
 	
-	private void feedback(List<OrgGrade> gradeList) {
-
-		int avg1 = (int) (gradeList.stream().mapToDouble(s -> s.grade1).sum() / gradeList.size());
-		int avg2 = (int) gradeList.stream().mapToDouble(s -> s.grade2).sum() / gradeList.size();
-		int avg3 = (int) gradeList.stream().mapToDouble(s -> s.grade3).sum() / gradeList.size();
-		int avg4 = (int) gradeList.stream().mapToDouble(s -> s.grade4).sum() / gradeList.size();
-		int avg5 = (int) gradeList.stream().mapToDouble(s -> s.grade5).sum() / gradeList.size();
-
-		this.updateOrganization(avg1, avg2, avg3, avg4, avg5);
-		
+	
+	
+	public static String getTypeById(int id) {
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[]{Integer.toString(id)};
+		String orgType=null;
+		try {
+			String jsonStr = query.query(chainCode,fcnName,queryArgs);
+			JSONObject json = JSONObject.parseObject(jsonStr);
+			orgType = json.getString("orgType");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return orgType;
 	}
 	
 	public static int getRankById(int id) {
@@ -51,7 +57,44 @@ public class Organization {
 		return rank;
 	}
 	
-	public void updateOrganization(int avg1, int avg2, int avg3, int avg4, int avg5) {};
+	public static Organization queryOrgById(int id) {
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[]{Integer.toString(id)};
+		
+		int orgId = 0;
+		String name = null;
+		int score = 0;
+		int rank = 0;
+		String orgType = null;
+	
+		String jsonStr;
+		try {
+			jsonStr = query.query(chainCode,fcnName,queryArgs);
+			JSONObject json = JSONObject.parseObject(jsonStr);
+			orgId = id;
+			name = json.getString("name");
+			score = json.getIntValue("score");
+			rank = json.getIntValue("rank");
+			orgType = json.getString("orgType");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Organization org = new Organization(orgId, name, score, rank, orgType);
+		return org;
+	}
+	
+	public void updateOrganization(int avg1, int avg2, int avg3, int avg4, int avg5) {
+		InvokeBCP invoke = new InvokeBCP();
+		String[] invokeArgs = new String[]{String.valueOf(this.getOrgId()),String.valueOf(this.getScore())};
+		try {
+			invoke.invoke(chainCode,"updateOrganization",invokeArgs);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public int getOrgId() {
 		return orgId;
@@ -84,7 +127,16 @@ public class Organization {
 	public void setRank(int rank) {
 		this.rank = rank;
 	}
-public static void main(String args[]){
-	getRankById(401);
-}
+	
+	public String getOrgType() {
+		return orgType;
+	}
+
+	public void setOrgType(String orgType) {
+		this.orgType = orgType;
+	}
+
+	public static void main(String args[]){
+		getRankById(401);
+	}
 }

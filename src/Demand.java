@@ -67,7 +67,10 @@ public class Demand implements Comparable<Demand>, Serializable {
 		s3.setAmount(200);
 		s3.updateUnprofitableSupply();
 		
-		d1.matchToSupply();
+		MatchResult result = d1.matchToSupply();
+		result.getFeedbackOrgs(503);
+		result.prepareForFeedback();
+		result.giveFeedback(1, 503, 5, 5, 5, 5, 5);
 	}
 	/*
 	 * The map that matches a category to its corresponding priority.
@@ -120,7 +123,7 @@ public class Demand implements Comparable<Demand>, Serializable {
 	/*
 	 * Match this demand in the supply pools.
 	 */
-	public void matchToSupply() {
+	public MatchResult matchToSupply() {
 		SupplyManager supplyManager = new SupplyManager();
 
 		// First match with the unprofitable supply pool
@@ -132,7 +135,7 @@ public class Demand implements Comparable<Demand>, Serializable {
 		if (amountStillNeeded <= 0) {
 			System.out.println("Unprofitable supply List:\n");
 			System.out.println(unprofitableSupplyList);
-			return;		
+			return new MatchResult(this, unprofitableSupplyList, null, null, sum);		
 		}
 
 		// Calculate the price needed to pay for the available resources
@@ -173,6 +176,7 @@ public class Demand implements Comparable<Demand>, Serializable {
 //		if (sum < this.amountNeeded) {
 //			// TODO put this unmapped demand in the demand pool
 //		}
+		return new MatchResult(this, unprofitableSupplyList, profitableSupplyList, fundList, sum);
 	}
 
 	@Override
