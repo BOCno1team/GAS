@@ -14,11 +14,54 @@ public class SupplyManager {
 	//block chain connection profile
 	private final static String chainCode = "go_package8";
 
+	public static void main(String[] args) throws Exception{
+		int demandId = 102;
+		String name = "water";
+		String category = "Food";
+		int amountNeeded = 700;
+		String unit = "kg";
+		int demanderId = 601;
+		int priority = 1;
+		Demand d2 = new Demand(demandId, name, category, amountNeeded, unit, demanderId, priority);
+
+		MatchResult result = d2.matchToSupply();
+
+		int orgID = 503;
+		System.out.println("****** Feedback process for org" + orgID + " starts:");	
+		List<Integer> feedbackList = result.getFeedbackOrgs(orgID);
+		System.out.println("-----" + orgID + " should get feedback from organizations: " + feedbackList + "\n");
+		
+		//print previous result
+		System.out.println("Previous score of org " + orgID + " is" + Organization.getScoreById(503));
+		
+		System.out.println("\nGrading in process...");
+		result.giveFeedback(demandId, 503, 5, 5, 5, 5, 5);
+		result.giveFeedback(demandId, 503, 3, 3, 3, 3, 3);
+		result.giveFeedback(demandId, 503, 4, 4, 4, 4, 4);
+		
+
+		
+		//verify result
+		String key = Integer.toString(demandId)+"-"+Integer.toString(503);
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[]{key}; 
+
+		try {
+			Thread.sleep(10000);
+			String jsonStr = query.query("go_package2","query", queryArgs);
+			System.out.println(jsonStr);			
+	   } catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("new score of org" + orgID + " is " + Organization.getScoreById(503));
+	}
+	
 	public SupplyManager() {
 		super();
 	}
 
-	// TODO get the corresponding list of supplies
+	
 	public static List<UnprofitableSupply> getUnprofitableSupplyList(String ResourceName) {
 		QueryBCP queryHelper =new QueryBCP();
 		String[] args =new String[]{ResourceName};
@@ -43,7 +86,9 @@ public class SupplyManager {
 				unit = jsonObj.getString("unit");
 				providerId = jsonObj.getIntValue("organization");
 				providerRank = Organization.getRankById(providerId);
-				resultList.add(new UnprofitableSupply(supplyId,name,amount,unit,providerId,providerRank));
+				if (amount != 0) {
+					resultList.add(new UnprofitableSupply(supplyId,name,amount,unit,providerId,providerRank));
+				}
 			}
 			
 		} catch (Exception e) {
@@ -54,7 +99,6 @@ public class SupplyManager {
 		return resultList;
 	}
 
-	// TODO get the corresponding list of supplies
 	public List<ProfitableSupply> getProfitableSupplyList(String ResourceName) {
 		QueryBCP queryHelper =new QueryBCP();
 		String[] args =new String[]{ResourceName};
@@ -66,7 +110,7 @@ public class SupplyManager {
 		int amount = 0;
 		String unit = null;
 		int providerId = 0;
-		double unitPrice = 0;
+		int unitPrice = 0;
 		int providerRank = 0;
 		try {
 			jsonStr = queryHelper.query(chainCode, "queryProByName", args);
@@ -79,9 +123,11 @@ public class SupplyManager {
 				amount = jsonObj.getIntValue("amount");
 				unit = jsonObj.getString("unit");
 				providerId = jsonObj.getIntValue("organization");
-				unitPrice = jsonObj.getDoubleValue("unitprice");
+				unitPrice = jsonObj.getIntValue("unitprice");
 				providerRank = Organization.getRankById(providerId);
-				resultList.add(new ProfitableSupply(supplyId,name,amount,unit,providerId,unitPrice,providerRank));
+				if (amount != 0 && unitPrice != 0) { //TODO: is there a better solution?
+					resultList.add(new ProfitableSupply(supplyId,name,amount,unit,providerId,unitPrice,providerRank));
+				}
 			}
 			
 		} catch (Exception e) {
@@ -147,10 +193,10 @@ public class SupplyManager {
 			
 			// Update info
 			sum += amountUsed;
-			s.deductAmount(amountUsed);
-			s.updateUnprofitableSupply();
+//			s.deductAmount(amountUsed);  ****************************************
+//			s.updateUnprofitableSupplyAmount(); ***************LOOK HERE***************
 			
-			System.out.println("UNPROFITABLE: "+s.getProviderId()+" provided "+amountUsed+" amount");
+			System.out.println("UNPROFITABLE: (supplyID " + s.getSupplyId() + ") Org" +s.getProviderId()+" provided "+amountUsed+ s.getUnit());
 		}
 		
 		return supplyList;
@@ -222,18 +268,13 @@ public class SupplyManager {
 			// Update info
 			sum += amountUsed;
 			fundLeft -= amountUsed * s.getUnitPrice();
-			s.deductAmount(amountUsed);
-			s.updateProfitableSupply();
-			System.out.println("PROFITABLE: "+s.getProviderId()+" provided "+amountUsed+" amount");
+//			s.deductAmount(amountUsed); ***************LOOK HERE***************
+//			s.updateProfitableSupplyAmount();   ***************LOOK HERE***************
+			System.out.println("PROFITABLE: (supplyID " + s.getSupplyId() + ") Org" +s.getProviderId()+" provided "+amountUsed+ s.getUnit());
 		}
 		
 		return supplyList;
 	}
 	
-	
-	
-	public static void main(String[] args) throws Exception{
-		
-	}
 }
 

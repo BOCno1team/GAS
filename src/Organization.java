@@ -45,7 +45,6 @@ public class Organization {
 			JSONObject json = JSONObject.parseObject(jsonStr);
 			orgType = json.getString("orgType");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return orgType;
@@ -60,7 +59,6 @@ public class Organization {
 			JSONObject json = JSONObject.parseObject(jsonStr);
 			rank = Integer.parseInt(json.getString("rank"));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return rank;
@@ -101,7 +99,6 @@ public class Organization {
 			rank = json.getIntValue("rank");
 			orgType = json.getString("orgType");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -118,7 +115,6 @@ public class Organization {
 		try {
 			invoke.invoke(chainCode,"updateOrganization",invokeArgs);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
