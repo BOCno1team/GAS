@@ -24,10 +24,10 @@ public class Organization {
 		this.orgType = orgType;
 	}
 	
-	public void initOrganization(int orgId, String name, int score, int rank, String orgType) {
+	public void initOrganization(int orgId, String name, String orgType) {
 		InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(orgId), name, 
-				String.valueOf(score), String.valueOf(rank), orgType};
+				String.valueOf(50), String.valueOf(2), orgType};
 		try {
 			invoke.invoke(chainCode,"initOrganization",invokeArgs);
 		} catch (Exception e) {

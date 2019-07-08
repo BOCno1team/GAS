@@ -184,6 +184,29 @@ public class Demand implements Comparable<Demand>, Serializable {
 		}
 		return 0;
 	}
+	
+	public static void uplinkUnprofitableSupply(int demandId, String name, String category, double amount, String unit, int priority , int demanderId) {
+    	InvokeBCP invoke = new InvokeBCP();
+		String[] invokeArgs = new String[]{String.valueOf(demandId),name, category, 
+						String.valueOf(amount),String.valueOf(unit), String.valueOf(priority), String.valueOf(demanderId)};
+		try {
+			invoke.invoke(chainCode,"initDemand",invokeArgs);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void updateDemandAmount(int demandId, double amount) {
+		InvokeBCP invoke = new InvokeBCP();
+		String[] invokeArgs = new String[]{String.valueOf(demandId),String.valueOf(amount)};
+		try {
+			invoke.invoke(chainCode,"updateDemandamount",invokeArgs);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	// The getters and setters
 	public int getDemanderId() {
