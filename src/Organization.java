@@ -15,6 +15,22 @@ public class Organization {
 	private final static String chainCode = "go_package8";
 	private final static String fcnName = "queryByKey";
 	
+	
+	public static void main(String args[]){
+		initOrganization(505, "InternationalRescue", "Executor");
+		
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[]{"505"};
+
+		try {
+			String jsonStr = query.query("go_package8","queryByKey",queryArgs);
+			System.out.println(jsonStr);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public Organization(int orgId, String name, int score, int rank, String orgType) {
 		super();
 		this.orgId = orgId;
@@ -24,7 +40,7 @@ public class Organization {
 		this.orgType = orgType;
 	}
 	
-	public void initOrganization(int orgId, String name, String orgType) {
+	public static void initOrganization(int orgId, String name, String orgType) {
 		InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(orgId), name, 
 				String.valueOf(50), String.valueOf(2), orgType};
@@ -159,7 +175,5 @@ public class Organization {
 		this.orgType = orgType;
 	}
 
-	public static void main(String args[]){
-		getRankById(401);
-	}
+	
 }
