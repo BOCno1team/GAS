@@ -15,7 +15,41 @@ public class Demand implements Comparable<Demand>, Serializable {
 	private int amountNeeded;
 	private String unit;
 	private int priority; // range from 1 to 3 to represent the urgency.
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public int getAmountNeeded() {
+		return amountNeeded;
+	}
+
+	public void setAmountNeeded(int amountNeeded) {
+		this.amountNeeded = amountNeeded;
+	}
+
+	public double getLat() {
+		return lat;
+	}
+
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
+
+	public double getLon() {
+		return lon;
+	}
+
+	public void setLon(double lon) {
+		this.lon = lon;
+	}
+
 	private int demanderId;
+	private double lat; // latitude of the destination in decimal degrees
+	private double lon; //longitude of the destination in decimal degrees
 
 	private final static String chainCode = "go_package8";
 	private static final long serialVersionUID = 20190625050327L;
@@ -119,8 +153,7 @@ public class Demand implements Comparable<Demand>, Serializable {
 
 		// First match with the unprofitable supply pool
 		System.out.println("****** matching in unprofitable supply pool ******");
-		List<Supply> unprofitableSupplyList = supplyManager.mapInUnprofitableSupplyPool(this.getName(),
-				this.amountNeeded);
+		List<Supply> unprofitableSupplyList = supplyManager.mapInUnprofitableSupplyPool(this);
 		double sum = supplyManager.getTotalAmount(unprofitableSupplyList);
 
 		double amountStillNeeded = this.amountNeeded - sum;
@@ -133,7 +166,7 @@ public class Demand implements Comparable<Demand>, Serializable {
 		// Calculate the price needed to pay for the available resources
 		// in the profitable supply pool.
 		System.out.println("\n****** calculating price in profitable supply pool ******");
-		double price = supplyManager.calculatePriceInProfitableSupplyPool(this.getName(), (int) amountStillNeeded);
+		double price = supplyManager.calculatePriceInProfitableSupplyPool(this);
 		System.out.println("Total price needed is: " + price + "USD\n");
 		
 		// Map in the profitable supply pool with the fund.
@@ -142,8 +175,7 @@ public class Demand implements Comparable<Demand>, Serializable {
 		System.out.println("Fund actually provided is " + fund + "USD\n");
 		
 		System.out.println("****** matching in profitable supply pool ******");
-		List<Supply> profitableSupplyList = supplyManager.mapInProfitableSupplyPool(this.getName(),
-				(int) amountStillNeeded, fund);
+		List<Supply> profitableSupplyList = supplyManager.mapInProfitableSupplyPool(this, fund);
 		sum += supplyManager.getTotalAmount(profitableSupplyList);
 		double fundUsed = supplyManager.getTotalPrice(profitableSupplyList);
 
@@ -231,14 +263,6 @@ public class Demand implements Comparable<Demand>, Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public int getAmount() {
-		return amountNeeded;
-	}
-
-	public void setAmount(int amount) {
-		this.amountNeeded = amount;
 	}
 
 	public String getUnit() {

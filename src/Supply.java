@@ -6,6 +6,9 @@ public class Supply implements Comparable<Supply>, Cloneable {
 	private String unit;
 	private int providerId;
 	private int providerRank;
+	private double lat; //latitude of the providing position in decimal degrees
+	private double lon; //Longitude of the providing position in decimal degrees
+	private double coverRadius; //in kilometer
 	
 	public int getProviderRank() {
 		return providerRank;
@@ -13,6 +16,30 @@ public class Supply implements Comparable<Supply>, Cloneable {
 
 	public void setProviderRank(int providerRank) {
 		this.providerRank = providerRank;
+	}
+
+	public double getLat() {
+		return lat;
+	}
+
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
+
+	public double getLon() {
+		return lon;
+	}
+
+	public void setLon(double lon) {
+		this.lon = lon;
+	}
+
+	public double getCoverRadius() {
+		return coverRadius;
+	}
+
+	public void setCoverRadius(double coverRadius) {
+		this.coverRadius = coverRadius;
 	}
 
 	public Supply() {
