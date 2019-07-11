@@ -23,7 +23,7 @@ import main.java.org.example.util.Util;
 public class InvokeTest {
 
 	public static void main(String[] args) throws Exception {
-		 // TODO Auto-generated method stub
+		 
 		 UserContext adminUserContext = Util.readUserContext("org1", "ca");
 		 CryptoSuite cryptoSuite = CryptoSuite.Factory.getCryptoSuite();
 		 HFClient hfClient = HFClient.createNewInstance();

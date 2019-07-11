@@ -1,15 +1,11 @@
 import java.util.Collections;
 import java.util.List;
 
+//TODO: DEMAND MANAGER plz
 public class DemandManager {
 
 	public DemandManager() {
 		super();
-	}
-	
-	//TODO Interact with the blockchain ledger.
-	void updateDemand() {
-		return;
 	}
 	
 	/**

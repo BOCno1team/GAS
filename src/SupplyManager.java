@@ -22,7 +22,9 @@ public class SupplyManager {
 		String unit = "kg";
 		int demanderId = 601;
 		int priority = 1;
-		Demand d2 = new Demand(demandId, name, category, amountNeeded, unit, demanderId, priority);
+		double lat = 100;
+		double lon = 200;
+		Demand d2 = new Demand(demandId, name, category, amountNeeded, unit, demanderId, priority, lat, lon);
 
 		MatchResult result = d2.matchToSupply();
 
@@ -74,6 +76,9 @@ public class SupplyManager {
 		String unit = null;
 		int providerId = 0;
 		int providerRank = 0;
+		double lat = 0;
+		double lon = 0;
+		double coverRadius = 0;
 		try {
 			jsonStr = queryHelper.query(chainCode, "queryUnproByName", args);
 			JSONArray jsonArr = JSONObject.parseArray(jsonStr);
@@ -86,15 +91,17 @@ public class SupplyManager {
 				unit = jsonObj.getString("unit");
 				providerId = jsonObj.getIntValue("organization");
 				providerRank = Organization.getRankById(providerId);
-				
+				lat = jsonObj.getDoubleValue("lat");
+				lon = jsonObj.getDoubleValue("lon");
+				coverRadius = jsonObj.getDoubleValue("coverRadius");				
 				
 				if (amount != 0) {
-					resultList.add(new UnprofitableSupply(supplyId,name,amount,unit,providerId,providerRank));
+					resultList.add(new UnprofitableSupply(supplyId,name,amount,unit,providerId,providerRank, lat, lon, coverRadius));
 				}
 			}
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -113,6 +120,9 @@ public class SupplyManager {
 		String unit = null;
 		int providerId = 0;
 		int providerRank = 0;
+		double lat = 0;
+		double lon = 0;
+		double coverRadius = 0;
 		try {
 			jsonStr = queryHelper.query(chainCode, "queryUnproByName", args);
 			JSONArray jsonArr = JSONObject.parseArray(jsonStr);
@@ -125,8 +135,11 @@ public class SupplyManager {
 				unit = jsonObj.getString("unit");
 				providerId = jsonObj.getIntValue("organization");
 				providerRank = Organization.getRankById(providerId);
-				
-				UnprofitableSupply supply = new UnprofitableSupply(supplyId,name,amount,unit,providerId,providerRank);
+				lat = jsonObj.getDoubleValue("lat");
+				lon = jsonObj.getDoubleValue("lon");
+				coverRadius = jsonObj.getDoubleValue("coverRadius");	
+							
+				UnprofitableSupply supply = new UnprofitableSupply(supplyId,name,amount,unit,providerId,providerRank, lat, lon, coverRadius);
 				UnprofitableSupplyDistancePair pair = new UnprofitableSupplyDistancePair(demand, supply);
 				double distance = pair.getDistance();
 				if (amount != 0 && distance < supply.getCoverRadius()) {
@@ -135,7 +148,7 @@ public class SupplyManager {
 			}
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -143,45 +156,45 @@ public class SupplyManager {
 	}
 
 
-	public List<ProfitableSupply> getProfitableSupplyList(String ResourceName) {
-		QueryBCP queryHelper =new QueryBCP();
-		String[] args =new String[]{ResourceName};
-		String jsonStr;
-		List<ProfitableSupply> resultList = new ArrayList<ProfitableSupply>();
-		JSONObject jsonObj = null;
-		int supplyId = 0;
-		String name = null;
-		int amount = 0;
-		String unit = null;
-		int providerId = 0;
-		int unitPrice = 0;
-		int providerRank = 0;
-		try {
-			jsonStr = queryHelper.query(chainCode, "queryProByName", args);
-			JSONArray jsonArr = JSONObject.parseArray(jsonStr);
-			for (int i = 0 ; i < jsonArr.size() ; i++){
-				jsonObj = jsonArr.getJSONObject(i);
-				jsonObj = JSONObject.parseObject(jsonObj.getString("Record"));
-				supplyId = jsonObj.getIntValue("supplyID");
-				name = jsonObj.getString("name");
-				amount = jsonObj.getIntValue("amount");
-				unit = jsonObj.getString("unit");
-				providerId = jsonObj.getIntValue("organization");
-				unitPrice = jsonObj.getIntValue("unitprice");
-				providerRank = Organization.getRankById(providerId);
-			
-				if (amount != 0 && unitPrice != 0) { //TODO: is there a better solution?
-					resultList.add(new ProfitableSupply(supplyId,name,amount,unit,providerId,unitPrice,providerRank));
-				}
-			}
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return resultList;
-	}
+//	public List<ProfitableSupply> getProfitableSupplyList(String ResourceName) {
+//		QueryBCP queryHelper =new QueryBCP();
+//		String[] args =new String[]{ResourceName};
+//		String jsonStr;
+//		List<ProfitableSupply> resultList = new ArrayList<ProfitableSupply>();
+//		JSONObject jsonObj = null;
+//		int supplyId = 0;
+//		String name = null;
+//		int amount = 0;
+//		String unit = null;
+//		int providerId = 0;
+//		int unitPrice = 0;
+//		int providerRank = 0;
+//		try {
+//			jsonStr = queryHelper.query(chainCode, "queryProByName", args);
+//			JSONArray jsonArr = JSONObject.parseArray(jsonStr);
+//			for (int i = 0 ; i < jsonArr.size() ; i++){
+//				jsonObj = jsonArr.getJSONObject(i);
+//				jsonObj = JSONObject.parseObject(jsonObj.getString("Record"));
+//				supplyId = jsonObj.getIntValue("supplyID");
+//				name = jsonObj.getString("name");
+//				amount = jsonObj.getIntValue("amount");
+//				unit = jsonObj.getString("unit");
+//				providerId = jsonObj.getIntValue("organization");
+//				unitPrice = jsonObj.getIntValue("unitprice");
+//				providerRank = Organization.getRankById(providerId);
+//			
+//				if (amount != 0 && unitPrice != 0) { //TODO: is there a better solution?
+//					resultList.add(new ProfitableSupply(supplyId,name,amount,unit,providerId,unitPrice,providerRank));
+//				}
+//			}
+//			
+//		} catch (Exception e) {
+//			
+//			e.printStackTrace();
+//		}
+//		
+//		return resultList;
+//	}
 	
 	public List<ProfitableSupplyDistancePair> getProfitableSupplyList(Demand demand) {
 		QueryBCP queryHelper =new QueryBCP();
@@ -196,6 +209,9 @@ public class SupplyManager {
 		int providerId = 0;
 		int unitPrice = 0;
 		int providerRank = 0;
+		double lat = 0;
+		double lon = 0;
+		double coverRadius = 0;
 		try {
 			jsonStr = queryHelper.query(chainCode, "queryProByName", args);
 			JSONArray jsonArr = JSONObject.parseArray(jsonStr);
@@ -209,9 +225,11 @@ public class SupplyManager {
 				providerId = jsonObj.getIntValue("organization");
 				unitPrice = jsonObj.getIntValue("unitprice");
 				providerRank = Organization.getRankById(providerId);
+				lat = jsonObj.getDoubleValue("lat");
+				lon = jsonObj.getDoubleValue("lon");
+				coverRadius = jsonObj.getDoubleValue("coverRadius");	
 				
-				
-				ProfitableSupply supply = new ProfitableSupply(supplyId, name, amount, unit, providerId, unitPrice, providerRank);
+				ProfitableSupply supply = new ProfitableSupply(supplyId, name, amount, unit, providerId, unitPrice, providerRank, lat, lon, coverRadius);
 				ProfitableSupplyDistancePair pair = new ProfitableSupplyDistancePair(demand, supply);
 				double distance = pair.getDistance();
 
@@ -221,7 +239,7 @@ public class SupplyManager {
 			}
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -356,12 +374,10 @@ public class SupplyManager {
 	}
 
 	/**
-	 * Map in the profitable supply pool with the given amount of fund.
-	 * 
-	 * @param resourceName
-	 * @param amountNeeded
-	 * @param fund
-	 * @return the list of supplies that's mapped to the demand.
+	 * Map the demand in the profitable supply pool.
+	 * @param demand
+	 * @param fund The fund available to pay for the resources in the profitable supply pool.
+	 * @return
 	 */
 	List<Supply> mapInProfitableSupplyPool(Demand demand, double fund) {
 		int amountNeeded = demand.getAmountNeeded();
@@ -402,42 +418,42 @@ public class SupplyManager {
 		return supplyList;
 	}
 	
-	List<Supply> mapInProfitableSupplyPool(String resourceName, int amountNeeded, double fund) {
-		double fundLeft=fund;
-		int sum = 0;
-		List<Supply> supplyList = new ArrayList<Supply>();
-
-		List<ProfitableSupply> profitableSupplyPool = getProfitableSupplyList(resourceName);
-		Collections.sort(profitableSupplyPool);
-
-		for (ProfitableSupply s : profitableSupplyPool) {
-			int amountStillNeeded = amountNeeded - sum;
-			
-			// The amount of supply affordable with the fund.
-			int amountAffordable = (int) (fundLeft / s.getUnitPrice());
-			if (amountAffordable == 0) { // Since supplies with low unit prices rank ahead.
-				break; 
-			}
-			// The actual amount of supply provided considering both fund and amount.
-			int amountProvided = (int) (amountAffordable > s.getAmount() ? s.getAmount() : amountAffordable);
-			
-			int amountUsed = amountProvided > amountStillNeeded ? amountStillNeeded : amountProvided;
-			
-			// Add supply to be used to the supply list
-			ProfitableSupply sCopy = (ProfitableSupply) s.clone();
-			sCopy.setAmount(amountUsed);
-			supplyList.add(sCopy);
-			
-			// Update info
-			sum += amountUsed;
-			fundLeft -= amountUsed * s.getUnitPrice();
-//			s.deductAmount(amountUsed); ***************LOOK HERE***************
-//			s.updateProfitableSupplyAmount();   ***************LOOK HERE***************
-			System.out.println("PROFITABLE: (supplyID " + s.getSupplyId() + ") Org" +s.getProviderId()+" provided "+amountUsed+ s.getUnit());
-		}
-		
-		return supplyList;
-	}
+//	List<Supply> mapInProfitableSupplyPool(String resourceName, int amountNeeded, double fund) {
+//		double fundLeft=fund;
+//		int sum = 0;
+//		List<Supply> supplyList = new ArrayList<Supply>();
+//
+//		List<ProfitableSupply> profitableSupplyPool = getProfitableSupplyList(resourceName);
+//		Collections.sort(profitableSupplyPool);
+//
+//		for (ProfitableSupply s : profitableSupplyPool) {
+//			int amountStillNeeded = amountNeeded - sum;
+//			
+//			// The amount of supply affordable with the fund.
+//			int amountAffordable = (int) (fundLeft / s.getUnitPrice());
+//			if (amountAffordable == 0) { // Since supplies with low unit prices rank ahead.
+//				break; 
+//			}
+//			// The actual amount of supply provided considering both fund and amount.
+//			int amountProvided = (int) (amountAffordable > s.getAmount() ? s.getAmount() : amountAffordable);
+//			
+//			int amountUsed = amountProvided > amountStillNeeded ? amountStillNeeded : amountProvided;
+//			
+//			// Add supply to be used to the supply list
+//			ProfitableSupply sCopy = (ProfitableSupply) s.clone();
+//			sCopy.setAmount(amountUsed);
+//			supplyList.add(sCopy);
+//			
+//			// Update info
+//			sum += amountUsed;
+//			fundLeft -= amountUsed * s.getUnitPrice();
+////			s.deductAmount(amountUsed); ***************LOOK HERE***************
+////			s.updateProfitableSupplyAmount();   ***************LOOK HERE***************
+//			System.out.println("PROFITABLE: (supplyID " + s.getSupplyId() + ") Org" +s.getProviderId()+" provided "+amountUsed+ s.getUnit());
+//		}
+//		
+//		return supplyList;
+//	}
 	
 }
 

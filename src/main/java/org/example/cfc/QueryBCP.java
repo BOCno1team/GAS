@@ -93,7 +93,7 @@ public class QueryBCP {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		// TODO Auto-generated method stub
+		
 		QueryBCP m = new QueryBCP();
 		String[] queryArgs= { "zxc" };
 		String cc = "go_package2";

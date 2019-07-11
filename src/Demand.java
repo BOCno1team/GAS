@@ -15,38 +15,6 @@ public class Demand implements Comparable<Demand>, Serializable {
 	private int amountNeeded;
 	private String unit;
 	private int priority; // range from 1 to 3 to represent the urgency.
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-	public int getAmountNeeded() {
-		return amountNeeded;
-	}
-
-	public void setAmountNeeded(int amountNeeded) {
-		this.amountNeeded = amountNeeded;
-	}
-
-	public double getLat() {
-		return lat;
-	}
-
-	public void setLat(double lat) {
-		this.lat = lat;
-	}
-
-	public double getLon() {
-		return lon;
-	}
-
-	public void setLon(double lon) {
-		this.lon = lon;
-	}
-
 	private int demanderId;
 	private double lat; // latitude of the destination in decimal degrees
 	private double lon; //longitude of the destination in decimal degrees
@@ -62,7 +30,9 @@ public class Demand implements Comparable<Demand>, Serializable {
 		String unit = "kg";
 		int demanderId = 601;
 		int priority = 1;
-		Demand d1 = new Demand(demandId, name, category, amountNeeded, unit, demanderId, priority);
+		double lat = 100;
+		double lon = 200;
+		Demand d1 = new Demand(demandId, name, category, amountNeeded, unit, priority, demanderId, lat, lon);
 
 		MatchResult result = d1.matchToSupply();
 
@@ -107,13 +77,10 @@ public class Demand implements Comparable<Demand>, Serializable {
 			put("Construction", 6);
 		}
 	};
-
-	/**
-	 * The constructor with the default priority.
-	 * 
-	 * @param name
-	 * @param amount
-	 * @param unit
+	
+	
+	/*
+	 * Constructor without priority and location
 	 */
 	public Demand(int demandId, String name, String category, int amount, String unit, int demanderId) {
 		super();
@@ -124,17 +91,46 @@ public class Demand implements Comparable<Demand>, Serializable {
 		this.unit = unit;
 		this.priority = priorityForCategoryMap.get(category);
 		this.demanderId = demanderId;
+		this.lat = Organization.getLocationById(demanderId)[0];
+		this.lon = Organization.getLocationById(demanderId)[1];
 	}
 
-	/**
-	 * The constructor with user defined priority.
-	 * 
-	 * @param name
-	 * @param amount
-	 * @param unit
-	 * @param priority
+	/*
+	 * Constructor with location but without priority
 	 */
-	public Demand(int demandId, String name, String category, int amount, String unit, int demanderId, int priority) {
+	public Demand(int demandId, String name, String category, int amount, String unit, int demanderId, double lat, double lon) {
+		super();
+		this.demandId = demandId;
+		this.name = name;
+		this.category = category;
+		this.amountNeeded = amount;
+		this.unit = unit;
+		this.priority = priorityForCategoryMap.get(category);
+		this.demanderId = demanderId;
+		this.lat = lat;
+		this.lon = lon;
+	}
+	
+	/*
+	 * Constructor with priority but without location
+	 */
+	public Demand(int demandId, String name, String category, int amount, String unit, int priority, int demanderId) {
+		super();
+		this.demandId = demandId;
+		this.name = name;
+		this.category = category;
+		this.amountNeeded = amount;
+		this.unit = unit;
+		this.priority = priority;
+		this.demanderId = demanderId;
+		this.lat = Organization.getLocationById(demanderId)[0];
+		this.lon = Organization.getLocationById(demanderId)[1];
+	}
+
+	/*
+	 * Constructor with both location and priority
+	 */
+	public Demand(int demandId, String name, String category, int amount, String unit, int priority, int demanderId, double lat, double lon) {
 		super();
 		this.demandId = demandId;
 		this.name = name;
@@ -143,6 +139,8 @@ public class Demand implements Comparable<Demand>, Serializable {
 		this.unit = unit;
 		this.demanderId = demanderId;
 		this.priority = priority;
+		this.lat = lat;
+		this.lon = lon;
 	}
 
 	/*
@@ -217,14 +215,28 @@ public class Demand implements Comparable<Demand>, Serializable {
 		return 0;
 	}
 	
-	public static void uplinkUnprofitableSupply(int demandId, String name, String category, double amount, String unit, int priority , int demanderId) {
+	public static void uplinkDemand(int demandId, String name, String category, int amount, String unit, int demanderId, int priority, double lat, double lon) {
     	InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(demandId),name, category, 
-						String.valueOf(amount),String.valueOf(unit), String.valueOf(priority), String.valueOf(demanderId)};
+						String.valueOf(amount),String.valueOf(unit), String.valueOf(priority), 
+						String.valueOf(demanderId), String.valueOf(lat), String.valueOf(lon)};
 		try {
 			invoke.invoke(chainCode,"initDemand",invokeArgs);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
+			e.printStackTrace();
+		}
+	}
+	
+	public void uplinkDemand() {
+    	InvokeBCP invoke = new InvokeBCP();
+		String[] invokeArgs = new String[]{String.valueOf(demandId),name, category, 
+						String.valueOf(amountNeeded),String.valueOf(unit), String.valueOf(priority),
+						String.valueOf(demanderId), String.valueOf(lat), String.valueOf(lon)};
+		try {
+			invoke.invoke(chainCode,"initDemand",invokeArgs);
+		} catch (Exception e) {
+			
 			e.printStackTrace();
 		}
 	}
@@ -235,7 +247,6 @@ public class Demand implements Comparable<Demand>, Serializable {
 		try {
 			invoke.invoke(chainCode,"updateDemandamount",invokeArgs);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -287,5 +298,37 @@ public class Demand implements Comparable<Demand>, Serializable {
 	   } catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public int getAmountNeeded() {
+		return amountNeeded;
+	}
+
+	public void setAmountNeeded(int amountNeeded) {
+		this.amountNeeded = amountNeeded;
+	}
+
+	public double getLat() {
+		return lat;
+	}
+
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
+
+	public double getLon() {
+		return lon;
+	}
+
+	public void setLon(double lon) {
+		this.lon = lon;
 	}
 }

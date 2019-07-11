@@ -10,42 +10,10 @@ public class Supply implements Comparable<Supply>, Cloneable {
 	private double lon; //Longitude of the providing position in decimal degrees
 	private double coverRadius; //in kilometer
 	
-	public int getProviderRank() {
-		return providerRank;
-	}
-
-	public void setProviderRank(int providerRank) {
-		this.providerRank = providerRank;
-	}
-
-	public double getLat() {
-		return lat;
-	}
-
-	public void setLat(double lat) {
-		this.lat = lat;
-	}
-
-	public double getLon() {
-		return lon;
-	}
-
-	public void setLon(double lon) {
-		this.lon = lon;
-	}
-
-	public double getCoverRadius() {
-		return coverRadius;
-	}
-
-	public void setCoverRadius(double coverRadius) {
-		this.coverRadius = coverRadius;
-	}
-
 	public Supply() {
 	};
-
-	public Supply(int supplyId, String name, double amount, String unit, int providerId, int providerRank) {
+	
+	public Supply(int supplyId, String name, double amount, String unit, int providerId, int providerRank, double lat, double lon, double coverRadius) {
 		super();
 		this.supplyId = supplyId;
 		this.name = name;
@@ -53,6 +21,9 @@ public class Supply implements Comparable<Supply>, Cloneable {
 		this.unit = unit;
 		this.providerId = providerId;
 		this.providerRank = providerRank;
+		this.lat = lat;
+		this.lon = lon;
+		this.coverRadius = coverRadius;
 	}
 
 	public int compareTo(Supply other) {
@@ -93,12 +64,6 @@ public class Supply implements Comparable<Supply>, Cloneable {
 		return s;
 	}
 	
-//	@Override
-//	public String toString() {
-//		return "Supply [supplyId=" + supplyId + ", name=" + name + ", amount=" + amount + 
-//				", with provider rank" + Organization.getRankById(this.providerId) + "]";
-//	}
-
 	public int getSupplyId() {
 		return supplyId;
 	}
@@ -131,4 +96,35 @@ public class Supply implements Comparable<Supply>, Cloneable {
 		this.unit = unit;
 	}
 
+	public int getProviderRank() {
+		return providerRank;
+	}
+
+	public void setProviderRank(int providerRank) {
+		this.providerRank = providerRank;
+	}
+
+	public double getLat() {
+		return lat;
+	}
+
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
+
+	public double getLon() {
+		return lon;
+	}
+
+	public void setLon(double lon) {
+		this.lon = lon;
+	}
+
+	public double getCoverRadius() {
+		return coverRadius;
+	}
+
+	public void setCoverRadius(double coverRadius) {
+		this.coverRadius = coverRadius;
+	}
 }

@@ -29,35 +29,55 @@ public class UnprofitableSupply extends Supply {
 			System.out.println(jsonStr2);
 			System.out.println(jsonStr3);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+	
 			e.printStackTrace();
 		}
 	}
 	
-	public UnprofitableSupply(int supplyId, String name, double amount, String unit, int providerID, int providerRank) {
-		super(supplyId, name, amount, unit, providerID, providerRank);
+	/*
+	 * Constructor with user defined location and cover radius attributes
+	 */
+	public UnprofitableSupply(int supplyId, String name, double amount, String unit, int providerID) {
+		super(supplyId, name, amount, unit, providerID, -1, -1, -1, -1);
+		int providerRank = Organization.getRankById(providerID);
+		double lat = Organization.getLocationById(providerID)[0];
+		double lon = Organization.getLocationById(providerID)[1];
+		double coverRadius = Provider.getCoverRadiusById(providerID);
+		this.setProviderRank(providerRank);
+		this.setLat(lat);
+		this.setLon(lon);
+		this.setCoverRadius(coverRadius);
+	}
+	
+	/*
+	 * Constructor with default location and cover radius attributes.
+	 */
+	public UnprofitableSupply(int supplyId, String name, double amount, String unit, int providerID, int providerRank, double lat, double lon, double coverRadius) {
+		super(supplyId, name, amount, unit, providerID, providerRank, lat, lon, coverRadius);
 	}
 
     public void uplinkUnprofitableSupply() {
     	InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(this.getSupplyId()),String.valueOf(this.getName()),
-						String.valueOf(this.getAmount()),String.valueOf(this.getUnit()),String.valueOf(this.getProviderId())};
+						String.valueOf(this.getAmount()),String.valueOf(this.getUnit()), String.valueOf(this.getProviderId()), 
+						String.valueOf(this.getLat()), String.valueOf(this.getLon()), String.valueOf(this.getCoverRadius())};
 		try {
 			invoke.invoke(chainCode,"initUnprofitablesupply",invokeArgs);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
     
-    public static void uplinkUnprofitableSupply(int supplyId, String name, double amount, String unit, int providerID) {
+    public static void uplinkUnprofitableSupply(int supplyId, String name, double amount, String unit, int providerID, double lat, double lon, double coverRadius) {
     	InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(supplyId),name,
-						String.valueOf(amount),String.valueOf(unit),String.valueOf(providerID)};
+						String.valueOf(amount),String.valueOf(unit),String.valueOf(providerID), 
+						String.valueOf(lat), String.valueOf(lon), String.valueOf(coverRadius)};
 		try {
 			invoke.invoke(chainCode,"initUnprofitablesupply",invokeArgs);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -68,7 +88,7 @@ public class UnprofitableSupply extends Supply {
 		try {
 			invoke.invoke(chainCode,"updateUnprofitablesupplyamount",invokeArgs);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -79,7 +99,7 @@ public class UnprofitableSupply extends Supply {
 		try {
 			invoke.invoke(chainCode,"updateUnprofitablesupplyamount",invokeArgs);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}

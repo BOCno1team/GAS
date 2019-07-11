@@ -25,37 +25,60 @@ public class ProfitableSupply extends Supply{
 			System.out.println(jsonStr);
 			System.out.println(jsonStr2);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
 	}
 	
-	public ProfitableSupply(int supplyId, String name, int amount, String unit, int providerId, int unitPrice, int rank) {
-		super(supplyId, name, amount, unit, providerId, rank);
+	/*
+	 * Constructor with user defined location and cover radius attributes
+	 */
+	public ProfitableSupply(int supplyId, String name, double amount, String unit, int providerID, int unitPrice) {
+		super(supplyId, name, amount, unit, providerID, -1, -1, -1, -1);
+		this.unitPrice = unitPrice;
+		
+		int providerRank = Organization.getRankById(providerID);
+		double lat = Organization.getLocationById(providerID)[0];
+		double lon = Organization.getLocationById(providerID)[1];
+		double coverRadius = Provider.getCoverRadiusById(providerID);
+		this.setProviderRank(providerRank);
+		this.setLat(lat);
+		this.setLon(lon);
+		this.setCoverRadius(coverRadius);
+	}
+	
+	/*
+	 * Constructor with default location and cover radius attributes.
+	 */
+	public ProfitableSupply(int supplyId, String name, int amount, String unit, int providerId, int unitPrice, int rank, double lat, double lon, double coverRadius) {
+		super(supplyId, name, amount, unit, providerId, rank, lat, lon, coverRadius);
 		this.unitPrice = unitPrice;
 	}
 	
 	public void uplinkProfitableSupply() {
 		InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(this.getSupplyId()),String.valueOf(this.getName()),
-						String.valueOf(this.getAmount()),String.valueOf(this.getUnit()),String.valueOf(this.getProviderId()), String.valueOf(this.getUnitPrice())};
+						String.valueOf(this.getAmount()),String.valueOf(this.getUnit()),String.valueOf(this.getProviderId()), 
+						String.valueOf(this.getUnitPrice()), String.valueOf(this.getLat()), String.valueOf(this.getLon()), 
+						String.valueOf(this.getCoverRadius())};
 		try {
 			invoke.invoke(chainCode,"initProfitablesupply",invokeArgs);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
 	
-	public static void uplinkProfitableSupply(int supplyId, String name, int amount, String unit, int providerId, int unitPrice) {
+	public static void uplinkProfitableSupply(int supplyId, String name, int amount, String unit, int providerId, int unitPrice, double lat, double lon, double coverRadius) {
 		InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(supplyId), String.valueOf(name),
-				String.valueOf(amount),String.valueOf(unit),String.valueOf(providerId), String.valueOf(unitPrice)};
+				String.valueOf(amount),String.valueOf(unit),String.valueOf(providerId), String.valueOf(unitPrice), 
+				String.valueOf(lat), String.valueOf(lon), String.valueOf(coverRadius)};
 		try {
 			invoke.invoke(chainCode,"initProfitablesupply",invokeArgs);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -66,20 +89,19 @@ public class ProfitableSupply extends Supply{
 		try {
 			invoke.invoke(chainCode,"updateProfitablesupplyamount",invokeArgs);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
 	
 
-	// TODO Implement the update supply method
 	public void updateProfitableSupplyAmount() {
 		InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(this.getSupplyId()),String.valueOf(this.getAmount())};
 		try {
 			invoke.invoke(chainCode,"updateProfitablesupplyamount",invokeArgs);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}

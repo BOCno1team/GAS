@@ -160,7 +160,7 @@ public class MatchResult {
 			InvokeBCP invoke = new InvokeBCP();
 			invoke.invoke("go_package2", "set", invokeArgs);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}

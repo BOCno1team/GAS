@@ -11,13 +11,15 @@ public class Organization {
 	private int score; // range from 0 to 100
 	private int rank;
 	private String orgType;
+	private double defaultLat;
+	private double defaultLon;
 	//block chain connection profile
 	private final static String chainCode = "go_package8";
 	private final static String fcnName = "queryByKey";
 	
 	
 	public static void main(String args[]){
-		initOrganization(505, "InternationalRescue", "Executor");
+		initOrganization(505, "InternationalRescue", "Executor", 0, 0);
 		
 		QueryBCP query = new QueryBCP();
 		String[] queryArgs = new String[]{"505"};
@@ -26,28 +28,30 @@ public class Organization {
 			String jsonStr = query.query("go_package8","queryByKey",queryArgs);
 			System.out.println(jsonStr);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
 	
-	public Organization(int orgId, String name, int score, int rank, String orgType) {
+	public Organization(int orgId, String name, int score, int rank, String orgType, double defaultLat, double defaultLon) {
 		super();
 		this.orgId = orgId;
 		this.name = name;
 		this.score = score;
 		this.rank = rank;
 		this.orgType = orgType;
+		this.defaultLat = defaultLat;
+		this.defaultLon = defaultLon;
 	}
 	
-	public static void initOrganization(int orgId, String name, String orgType) {
+	public static void initOrganization(int orgId, String name, String orgType, double lat, double lon) {
 		InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(orgId), name, 
-				String.valueOf(50), String.valueOf(2), orgType};
+				String.valueOf(50), String.valueOf(2), orgType, String.valueOf(lat), String.valueOf(lon)};
 		try {
 			invoke.invoke(chainCode,"initOrganization",invokeArgs);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -80,6 +84,22 @@ public class Organization {
 		return rank;
 	}
 	
+	public static double[] getLocationById(int id) {
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[]{Integer.toString(id)};
+		double lat = -1;
+		double lon = -1;
+		try {
+			String jsonStr = query.query(chainCode,fcnName,queryArgs);
+			JSONObject json = JSONObject.parseObject(jsonStr);
+			lat = json.getDoubleValue("defaultLat");
+			lon = json.getDoubleValue("defaultLon");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new double[] {lat, lon};
+	}
+	
 	public static int getScoreById(int id) {
 		QueryBCP query = new QueryBCP();
 		String[] queryArgs = new String[]{Integer.toString(id)};
@@ -89,7 +109,7 @@ public class Organization {
 			JSONObject json = JSONObject.parseObject(jsonStr);
 			score = Integer.parseInt(json.getString("score"));
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return score;
@@ -104,6 +124,8 @@ public class Organization {
 		int score = 0;
 		int rank = 0;
 		String orgType = null;
+		double lat = -1;
+		double lon = -1;
 	
 		String jsonStr;
 		try {
@@ -114,16 +136,17 @@ public class Organization {
 			score = json.getIntValue("score");
 			rank = json.getIntValue("rank");
 			orgType = json.getString("orgType");
+			lat = json.getDoubleValue("defaultLat");
+			lon = json.getDoubleValue("defaultLon");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		Organization org = new Organization(orgId, name, score, rank, orgType);
+		Organization org = new Organization(orgId, name, score, rank, orgType, lat, lon);
 		return org;
 	}
 	
-	
-	
+	//TODO: ?do we need toimplement for provider in Chaincode
 	public void updateOrganization(int avg1, int avg2, int avg3, int avg4, int avg5) {
 		InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(this.getOrgId()),
@@ -133,6 +156,22 @@ public class Organization {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public double getDefaultLat() {
+		return defaultLat;
+	}
+
+	public void setDefaultLat(double defaultLat) {
+		this.defaultLat = defaultLat;
+	}
+
+	public double getDefaultLon() {
+		return defaultLon;
+	}
+
+	public void setDefaultLon(double defaultLon) {
+		this.defaultLon = defaultLon;
 	}
 
 	public int getOrgId() {
