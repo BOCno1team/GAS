@@ -47,7 +47,7 @@ public class CommentServlet extends HttpServlet {
 			sb.append(line);
 		}
 		//将json字符串转换为json对象
-		//System.out.println(sb.toString());
+		System.out.println(sb.toString());
 		JSONObject json = JSONObject.parseObject(sb.toString());
 //		System.out.println(json.toJSONString());
 //		System.out.println(json.getString("newProvider"));
