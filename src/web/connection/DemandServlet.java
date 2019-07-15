@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -18,6 +19,9 @@ import com.alibaba.fastjson.JSONObject;
 
 import matching.Demand;
 import matching.MatchResult;
+import matching.ProfitableSupply;
+import matching.Supply;
+import matching.UnprofitableSupply;
 
 /**
  * Servlet implementation class DemandServlet
@@ -75,39 +79,60 @@ public class DemandServlet extends HttpServlet {
 			demand.uplinkDemand();
 		}
 		
-				
+		JSONArray unprofitableArray = new JSONArray();
+		JSONArray profitableArray = new JSONArray();
+		JSONArray fundArray = new JSONArray();
+		JSONArray demandArray = new JSONArray();
 		
-
-
-
+		Collections.sort(demandList);
+		for (Demand d : demandList) {
+			MatchResult result = d.matchToSupply();
+			Demand demand = result.getDemand();
+			
+			JSONObject jsonDemand = new JSONObject();
+			jsonDemand.put("demandId", demand.getDemandId());
+			jsonDemand.put("name", demand.getName());
+			jsonDemand.put("amount", demand.getAmountNeeded());
+			jsonDemand.put("unit", demand.getUnit());
+			jsonDemand.put("demanderId", demand.getDemandId());
+			demandArray.add(jsonDemand);
+			
+			for (Supply s : result.getUnprofitableList()) {
+				JSONObject item = new JSONObject();
+				item.put("supplyId",s.getSupplyId());
+				item.put("name", s.getName());
+				item.put("amount", s.getAmount());
+				item.put("unit", s.getUnit());
+				item.put("providerId", s.getProviderId());
+				unprofitableArray.add(item);
+			}
+						
+			for (Supply s : result.getProfitableList()) {
+				JSONObject item = new JSONObject();
+				item.put("supplyId",s.getSupplyId());
+				item.put("name", s.getName());
+				item.put("amount", s.getAmount());
+				item.put("unit", s.getUnit());
+				item.put("unitPrice", ((ProfitableSupply) s).getUnitPrice());
+				item.put("supplierId", s.getProviderId());
+				profitableArray.add(item);
+			}
+			
+			for (Supply s : result.getProfitableList()) {
+				JSONObject item = new JSONObject();
+				item.put("supplyId",s.getSupplyId());
+				item.put("name", "Fund");
+				item.put("amount", s.getAmount());
+				item.put("unit", "USD");
+				item.put("providerId", s.getProviderId());
+				fundArray.add(item);
+			}				
+		}
 		
-		
-		//System.out.println(array.toString());
-		
-		//TODO
-		/**
-		 * 需要在这里加入各种处理逻辑，以前端JSON中获取的内容为输入，调用撮合算法或是信息发布等功能，
-		 * 并获取返回值（全部基于java对象进行操作）
-		 * 
-		 * */
-		
-		
-		
-		//组织返回的内容
-		json = new JSONObject();
-		json.put("demandId", "testId");
-		array = new JSONArray();
-		JSONObject item = new JSONObject();
-		item.put("name","wuzi1");
-		item.put("unit","danwei1");
-		item.put("amount","shuliang1");
-		array.add(item);
-		item = new JSONObject();
-		item.put("name","wuzi2");
-		item.put("unit","danwei2");
-		item.put("amount","shuliang2");
-		array.add(item);
-		json.put("matchResultList", array);
+		json.put("DemandList", demandArray);
+		json.put("UnprofitableSupplyList", unprofitableArray);
+		json.put("ProfitableSupplyList", profitableArray);
+		json.put("fundList", fundArray);
 		//将JSON返回前端
 		out.append(json.toString());
 	}
