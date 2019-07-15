@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,14 +15,17 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 /**
- * Servlet implementation class hello
+ * Servlet implementation class DemandServlet
  */
-@WebServlet(description = "test", urlPatterns = { "/hello" })
-public class HelloServlet extends HttpServlet {
+@WebServlet(description = "DemandServlet", urlPatterns = { "/demand" })
+public class DemandServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-
-    public HelloServlet() {
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public DemandServlet() {
+        super();
         // TODO Auto-generated constructor stub
     }
 
@@ -48,18 +50,25 @@ public class HelloServlet extends HttpServlet {
 		//将json字符串转换为json对象
 		System.out.println(sb.toString());
 		JSONObject json = JSONObject.parseObject(sb.toString());
-		String supplyName = json.getString("supplyName");
-		String provider = json.getString("provider");//供给方ID
-		JSONArray array = JSONObject.parseArray(json.getString("supplyFormList"));
+		String demandId = json.getString("DemanderId");//需求方ID
+//		System.out.println(json.toJSONString());
+//		System.out.println(json.getString("newProvider"));
+//		//获取JSON中的内容，此处取id对应的内容
+		JSONArray array = JSONObject.parseArray(json.getString("demandFormList"));
 		JSONObject obj = null;
-		for(int i = 0 ; i < array.size() ; i++){			
+		for(int i = 0 ; i < array.size() ; i++){
 			obj = array.getJSONObject(i);
 			obj.getString("name");
-			obj.getString("supplyId");
+			obj.getString("categoty");
+			obj.getString("demandId");
 			obj.getString("amount");
 			obj.getString("unit");
-			obj.getString("unitPrice");
 		}
+	
+		
+		
+
+
 
 		
 		
@@ -69,12 +78,26 @@ public class HelloServlet extends HttpServlet {
 		/**
 		 * 需要在这里加入各种处理逻辑，以前端JSON中获取的内容为输入，调用撮合算法或是信息发布等功能，
 		 * 并获取返回值（全部基于java对象进行操作）
+		 * 
 		 * */
+		
 		
 		
 		//组织返回的内容
 		json = new JSONObject();
-		json.put("res", "aaa");
+		json.put("demandId", "testId");
+		array = new JSONArray();
+		JSONObject item = new JSONObject();
+		item.put("name","wuzi1");
+		item.put("unit","danwei1");
+		item.put("amount","shuliang1");
+		array.add(item);
+		item = new JSONObject();
+		item.put("name","wuzi2");
+		item.put("unit","danwei2");
+		item.put("amount","shuliang2");
+		array.add(item);
+		json.put("matchResultList", array);
 		//将JSON返回前端
 		out.append(json.toString());
 	}
