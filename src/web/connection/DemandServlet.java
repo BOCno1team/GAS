@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+
+import matching.Demand;
+import matching.MatchResult;
 
 /**
  * Servlet implementation class DemandServlet
@@ -50,22 +55,27 @@ public class DemandServlet extends HttpServlet {
 		//将json字符串转换为json对象
 		System.out.println(sb.toString());
 		JSONObject json = JSONObject.parseObject(sb.toString());
-		String demandId = json.getString("DemanderId");//需求方ID
+		int demanderId = json.getIntValue("DemanderId");//需求方ID
 //		System.out.println(json.toJSONString());
 //		System.out.println(json.getString("newProvider"));
 //		//获取JSON中的内容，此处取id对应的内容
 		JSONArray array = JSONObject.parseArray(json.getString("demandFormList"));
 		JSONObject obj = null;
+		List<Demand> demandList = new ArrayList<>();
 		for(int i = 0 ; i < array.size() ; i++){
 			obj = array.getJSONObject(i);
-			obj.getString("name");
-			obj.getString("categoty");
-			obj.getString("demandId");
-			obj.getString("amount");
-			obj.getString("unit");
+			String name = obj.getString("name");
+			String category = obj.getString("categoty");
+			int id = obj.getIntValue("demandId");
+			int amount = obj.getIntValue("amount");
+			String unit = obj.getString("unit");
+			
+			Demand demand = new Demand(id, name, category, amount, unit, demanderId, 0, 0, 10);
+			demandList.add(demand);
+			demand.uplinkDemand();
 		}
-	
 		
+				
 		
 
 

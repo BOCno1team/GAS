@@ -1,6 +1,8 @@
 package web.connection;
 
 import java.io.BufferedReader;
+
+import matching.ProfitableSupply;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -49,18 +51,20 @@ public class HelloServlet extends HttpServlet {
 		System.out.println(sb.toString());
 		JSONObject json = JSONObject.parseObject(sb.toString());
 		String supplyName = json.getString("supplyName");
-		String provider = json.getString("provider");//供给方ID
+		int provider = json.getIntValue("provider");//供给方ID
 		JSONArray array = JSONObject.parseArray(json.getString("supplyFormList"));
 		JSONObject obj = null;
 		for(int i = 0 ; i < array.size() ; i++){			
 			obj = array.getJSONObject(i);
-			obj.getString("name");
-			obj.getString("supplyId");
-			obj.getString("amount");
-			obj.getString("unit");
-			obj.getString("unitPrice");
+			String name = obj.getString("name");
+			int id = obj.getIntValue("supplyId");
+			int amount = obj.getIntValue("amount");
+			String unit = obj.getString("unit");
+			double price = obj.getDoubleValue("unitPrice");
+			ProfitableSupply s = new ProfitableSupply(id, name, amount, unit, provider, price);
+			s.uplinkProfitableSupply();
 		}
-
+			
 		
 		
 		//System.out.println(array.toString());

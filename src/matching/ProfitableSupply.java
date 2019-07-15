@@ -6,7 +6,7 @@ import main.java.org.example.cfc.QueryBCP;
 
 public class ProfitableSupply extends Supply{
 	private int amount; // There is no fund in the profitable supply pool, so the amount should be an integer.
-	private int unitPrice;
+	private double unitPrice;
 
 	private final static String chainCode = "go_package8";
 	
@@ -35,7 +35,7 @@ public class ProfitableSupply extends Supply{
 	/*
 	 * Constructor with user defined location and cover radius attributes
 	 */
-	public ProfitableSupply(int supplyId, String name, double amount, String unit, int providerID, int unitPrice) {
+	public ProfitableSupply(int supplyId, String name, double amount, String unit, int providerID, double unitPrice) {
 		super(supplyId, name, amount, unit, providerID, -1, -1, -1, -1);
 		this.unitPrice = unitPrice;
 		
@@ -137,7 +137,7 @@ public class ProfitableSupply extends Supply{
 	}
 
 
-	public int getUnitPrice() {
+	public double getUnitPrice() {
 		return unitPrice;
 	}
 
