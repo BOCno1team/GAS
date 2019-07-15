@@ -8,7 +8,7 @@ public class ProfitableSupply extends Supply{
 	private int amount; // There is no fund in the profitable supply pool, so the amount should be an integer.
 	private double unitPrice;
 
-	private final static String chainCode = "go_package8";
+	private final static String chainCode = "gopackage";
 	
 	public static void main(String[] args) {
 //		uplinkProfitableSupply(1003, "water", 150, "L", 502, 3);

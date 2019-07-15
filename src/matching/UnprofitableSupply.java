@@ -5,7 +5,7 @@ import main.java.org.example.cfc.QueryBCP;
 
 public class UnprofitableSupply extends Supply {
 	//block chain connection profile
-	private final static String chainCode = "go_package8";
+	private final static String chainCode = "gopackage";
 
 	public static void main(String[] args) {
 //		uplinkUnprofitableSupply(901, "water", 100, "L", 501);

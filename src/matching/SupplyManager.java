@@ -13,7 +13,7 @@ import main.java.org.example.cfc.QueryBCP;
  */
 public class SupplyManager {
 	//block chain connection profile
-	private final static String chainCode = "go_package8";
+	private final static String chainCode = "gopackage";
 
 	public static void main(String[] args) throws Exception{
 		int demandId = 102;
@@ -230,7 +230,7 @@ public class SupplyManager {
 				lon = jsonObj.getDoubleValue("lon");
 				coverRadius = jsonObj.getDoubleValue("coverRadius");	
 				
-				ProfitableSupply supply = new ProfitableSupply(supplyId, name, amount, unit, providerId, unitPrice, providerRank, lat, lon, coverRadius);
+				ProfitableSupply supply = new ProfitableSupply(supplyId, name, amount, unit, providerId, unitPrice, lat, lon, coverRadius);
 				ProfitableSupplyDistancePair pair = new ProfitableSupplyDistancePair(demand, supply);
 				double distance = pair.getDistance();
 

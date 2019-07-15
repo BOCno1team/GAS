@@ -14,7 +14,7 @@ public class MatchResult {
 	private List<Supply> fundList = null;
 	private double sumGethered;
 
-	private final static String chainCode = "go_package8";
+	private final static String chainCode = "gopackage";
 
 	public static void main(String[] args) {
 		// initOneFeedback(501);
@@ -57,7 +57,7 @@ public class MatchResult {
 		String[] queryArgs = new String[] { key };
 
 		try {
-			String jsonStr = query.query("go_package2", "query", queryArgs);
+			String jsonStr = query.query("gopackage", "queryByKey", queryArgs);
 			JSONObject json = JSONObject.parseObject(jsonStr);
 			int sum1 = json.getIntValue("grade1");
 			int sum2 = json.getIntValue("grade2");
@@ -86,7 +86,7 @@ public class MatchResult {
 			String newGradeString = JSONObject.toJSONString(newGrade);
 			String[] invokeArgs = new String[] { key, newGradeString };
 			InvokeBCP invoke = new InvokeBCP();
-			invoke.invoke("go_package2", "set", invokeArgs);
+			invoke.invoke("gopackage", "set", invokeArgs);
 
 			if (count == totalCount) {
 				Organization receiver = Organization.queryOrgById(receiverId);
@@ -159,7 +159,7 @@ public class MatchResult {
 
 		try {
 			InvokeBCP invoke = new InvokeBCP();
-			invoke.invoke("go_package2", "set", invokeArgs);
+			invoke.invoke("gopackage", "set", invokeArgs);
 		} catch (Exception e) {
 			
 			e.printStackTrace();
