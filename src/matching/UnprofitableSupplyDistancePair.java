@@ -1,3 +1,4 @@
+package matching;
 
 public class UnprofitableSupplyDistancePair implements Comparable<UnprofitableSupplyDistancePair> {
 	private Demand demand;

@@ -1,3 +1,4 @@
+package matching;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class MatchResult {
 		String[] queryArgs = new String[] { key };
 
 		try {
-			String jsonStr = query.query("go_package2", "query", queryArgs);
+			String jsonStr = query.query(chainCode, "queryByKey", queryArgs);
 			System.out.println(jsonStr);
 		} catch (Exception e) {
 			e.printStackTrace();

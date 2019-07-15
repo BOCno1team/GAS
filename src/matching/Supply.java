@@ -1,3 +1,4 @@
+package matching;
 
 public class Supply implements Comparable<Supply>, Cloneable {
 	private int supplyId;

@@ -1,3 +1,4 @@
+package matching;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
@@ -14,18 +15,18 @@ public class Organization {
 	private double defaultLat;
 	private double defaultLon;
 	//block chain connection profile
-	private final static String chainCode = "go_package8";
+	private final static String chainCode = "gopackage1";
 	private final static String fcnName = "queryByKey";
 	
 	
 	public static void main(String args[]){
-		initOrganization(505, "InternationalRescue", "Executor", 0, 0);
+		initOrganization(601, "jamacia-government", 90, 4, "demander", 31.2034, 121.4948);
 		
 		QueryBCP query = new QueryBCP();
-		String[] queryArgs = new String[]{"505"};
+		String[] queryArgs = new String[]{"601"};
 
 		try {
-			String jsonStr = query.query("go_package8","queryByKey",queryArgs);
+			String jsonStr = query.query(chainCode,"queryByKey",queryArgs);
 			System.out.println(jsonStr);
 		} catch (Exception e) {
 			
@@ -44,10 +45,11 @@ public class Organization {
 		this.defaultLon = defaultLon;
 	}
 	
-	public static void initOrganization(int orgId, String name, String orgType, double lat, double lon) {
+	// change grade to default 50
+	public static void initOrganization(int orgId, String name, int grade, int rank, String orgType, double lat, double lon) {
 		InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(orgId), name, 
-				String.valueOf(50), String.valueOf(2), orgType, String.valueOf(lat), String.valueOf(lon)};
+				String.valueOf(grade), String.valueOf(rank), orgType, String.valueOf(lat), String.valueOf(lon)};
 		try {
 			invoke.invoke(chainCode,"initOrganization",invokeArgs);
 		} catch (Exception e) {

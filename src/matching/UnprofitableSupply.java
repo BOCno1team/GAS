@@ -1,3 +1,4 @@
+package matching;
 
 import main.java.org.example.cfc.InvokeBCP;
 import main.java.org.example.cfc.QueryBCP;
@@ -35,7 +36,7 @@ public class UnprofitableSupply extends Supply {
 	}
 	
 	/*
-	 * Constructor with user defined location and cover radius attributes
+	 * Constructor with default location and cover radius attributes
 	 */
 	public UnprofitableSupply(int supplyId, String name, double amount, String unit, int providerID) {
 		super(supplyId, name, amount, unit, providerID, -1, -1, -1, -1);
@@ -50,7 +51,7 @@ public class UnprofitableSupply extends Supply {
 	}
 	
 	/*
-	 * Constructor with default location and cover radius attributes.
+	 * Constructor with user defined location and cover radius attributes.
 	 */
 	public UnprofitableSupply(int supplyId, String name, double amount, String unit, int providerID, int providerRank, double lat, double lon, double coverRadius) {
 		super(supplyId, name, amount, unit, providerID, providerRank, lat, lon, coverRadius);
