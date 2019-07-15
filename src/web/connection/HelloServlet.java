@@ -61,7 +61,7 @@ public class HelloServlet extends HttpServlet {
 			int amount = obj.getIntValue("amount");
 			String unit = obj.getString("unit");
 			double price = obj.getDoubleValue("unitPrice");
-			ProfitableSupply s = new ProfitableSupply(id, name, amount, unit, provider, price);
+			ProfitableSupply s = new ProfitableSupply(id, name, amount, unit, provider, price, 0, 0, 10);
 			s.uplinkProfitableSupply();
 		}
 			

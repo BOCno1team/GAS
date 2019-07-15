@@ -35,7 +35,7 @@ public class ProfitableSupply extends Supply{
 	/*
 	 * Constructor with user defined location and cover radius attributes
 	 */
-	public ProfitableSupply(int supplyId, String name, double amount, String unit, int providerID, double unitPrice) {
+	public ProfitableSupply(int supplyId, String name, int amount, String unit, int providerID, double unitPrice) {
 		super(supplyId, name, amount, unit, providerID, -1, -1, -1, -1);
 		this.unitPrice = unitPrice;
 		
@@ -52,8 +52,10 @@ public class ProfitableSupply extends Supply{
 	/*
 	 * Constructor with default location and cover radius attributes.
 	 */
-	public ProfitableSupply(int supplyId, String name, int amount, String unit, int providerId, int unitPrice, int rank, double lat, double lon, double coverRadius) {
-		super(supplyId, name, amount, unit, providerId, rank, lat, lon, coverRadius);
+	public ProfitableSupply(int supplyId, String name, double amount, String unit, int providerId, double unitPrice, double lat, double lon, double coverRadius) {
+		super(supplyId, name, amount, unit, providerId, -1, lat, lon, coverRadius);
+		int providerRank = Organization.getRankById(providerId);
+		this.setProviderRank(providerRank);
 		this.unitPrice = unitPrice;
 	}
 	
