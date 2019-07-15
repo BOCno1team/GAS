@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,18 +11,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 /**
- * Servlet implementation class hello
+ * Servlet implementation class MatchResultServlet
  */
-@WebServlet(description = "test", urlPatterns = { "/hello" })
-public class HelloServlet extends HttpServlet {
+@WebServlet(description = "mathResult", urlPatterns = { "/matchResult" })
+public class MatchResultServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
-
-    public HelloServlet() {
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public MatchResultServlet() {
+        super();
         // TODO Auto-generated constructor stub
     }
 
@@ -46,20 +47,17 @@ public class HelloServlet extends HttpServlet {
 			sb.append(line);
 		}
 		//将json字符串转换为json对象
-		System.out.println(sb.toString());
+		//System.out.println(sb.toString());
 		JSONObject json = JSONObject.parseObject(sb.toString());
-		String supplyName = json.getString("supplyName");
-		String provider = json.getString("provider");//供给方ID
-		JSONArray array = JSONObject.parseArray(json.getString("supplyFormList"));
-		JSONObject obj = null;
-		for(int i = 0 ; i < array.size() ; i++){			
-			obj = array.getJSONObject(i);
-			obj.getString("name");
-			obj.getString("supplyId");
-			obj.getString("amount");
-			obj.getString("unit");
-			obj.getString("unitPrice");
-		}
+//		System.out.println(json.toJSONString());
+//		System.out.println(json.getString("newProvider"));
+//		//获取JSON中的内容，此处取id对应的内容
+//		JSONArray array = JSONObject.parseArray(sb.toString());
+//		JSONObject obj = null;
+//		for(int i = 0 ; i < array.size() ; i++){			
+//			obj = array.getJSONObject(i);
+//			obj.getString("provider");
+//		}
 
 		
 		
