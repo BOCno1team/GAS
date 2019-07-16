@@ -25,9 +25,9 @@ public class Demand implements Comparable<Demand>, Serializable {
 
 	public static void main(String[] args) {
 		int demandId = 101;
-		String name = "milk";
+		String name = "bread";
 		String category = "Food";
-		int amountNeeded = 1;
+		int amountNeeded = 400;
 		String unit = "kg";
 		int demanderId = 601;
 		int priority = 1;
@@ -37,33 +37,33 @@ public class Demand implements Comparable<Demand>, Serializable {
 
 		MatchResult result = d1.matchToSupply();
 
-//		int orgID = 503;
-//		System.out.println("****** Feedback process for org" + orgID + " starts ******");	
-//		List<Integer> feedbackList = result.getFeedbackOrgs(orgID);
-//		System.out.println("-----" + orgID + " should get feedback from organizations: " + feedbackList + "\n");
-//		
-//		//print previous result
-//		System.out.println("Previous score of org " + orgID + " is" + Organization.getScoreById(503));
-//		
-//		System.out.println("\nGrading in process...");
-//		result.giveFeedback(demandId, 503, 5, 5, 5, 5, 5);
-//		result.giveFeedback(demandId, 503, 3, 3, 3, 3, 3);
-//		result.giveFeedback(demandId, 503, 4, 4, 4, 4, 4);
-//	
-////		verify result
-////		String key = Integer.toString(demandId)+"-"+Integer.toString(503);
-////		QueryBCP query = new QueryBCP();
-////		String[] queryArgs = new String[]{key}; 
-//
-//		try {
-//			Thread.sleep(100000);
-////			String jsonStr = query.query("go_package2","query", queryArgs);
-////			System.out.println(jsonStr);			
-//	   } catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		int orgID = 503;
+		System.out.println("****** Feedback process for org" + orgID + " starts ******");	
+		List<Integer> feedbackList = result.getFeedbackOrgs(orgID);
+		System.out.println("-----" + orgID + " should get feedback from organizations: " + feedbackList + "\n");
 		
-//		System.out.println("new score of org" + orgID + " is " + Organization.getScoreById(503));
+		//print previous result
+		System.out.println("Previous score of org " + orgID + " is" + Organization.getScoreById(503));
+		
+		System.out.println("\nGrading in process...");
+		result.giveFeedback(demandId, 503, 5, 5, 5, 5, 5);
+		result.giveFeedback(demandId, 503, 3, 3, 3, 3, 3);
+		result.giveFeedback(demandId, 503, 4, 4, 4, 4, 4);
+	
+//		verify result
+//		String key = Integer.toString(demandId)+"-"+Integer.toString(503);
+//		QueryBCP query = new QueryBCP();
+//		String[] queryArgs = new String[]{key}; 
+
+		try {
+			Thread.sleep(100000);
+//			String jsonStr = query.query("go_package2","query", queryArgs);
+//			System.out.println(jsonStr);			
+	   } catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("new score of org" + orgID + " is " + Organization.getScoreById(503));
 	}
 
 	/*
@@ -202,7 +202,7 @@ public class Demand implements Comparable<Demand>, Serializable {
 		}
 
 		MatchResult result = new MatchResult(this, unprofitableSupplyList, profitableSupplyList, fundList, sum);
-		//result.prepareForFeedback();
+		result.prepareForFeedback();
 		return result;
 	}
 
