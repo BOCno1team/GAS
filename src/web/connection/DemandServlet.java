@@ -76,7 +76,8 @@ public class DemandServlet extends HttpServlet {
 			
 			Demand demand = new Demand(id, name, category, amount, unit, 1, demanderId, 0, 0);
 			demandList.add(demand);
-			demand.uplinkDemand();
+			//TODO: uplink demand.
+			//demand.uplinkDemand();
 		}
 		
 		JSONArray unprofitableArray = new JSONArray();
@@ -94,7 +95,7 @@ public class DemandServlet extends HttpServlet {
 			jsonDemand.put("name", demand.getName());
 			jsonDemand.put("amount", demand.getAmountNeeded());
 			jsonDemand.put("unit", demand.getUnit());
-			jsonDemand.put("demanderId", demand.getDemandId());
+			jsonDemand.put("demanderId", demand.getDemanderId());
 			demandArray.add(jsonDemand);
 			
 			for (Supply s : result.getUnprofitableList()) {

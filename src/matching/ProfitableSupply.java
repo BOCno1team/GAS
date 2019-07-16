@@ -17,14 +17,14 @@ public class ProfitableSupply extends Supply{
 		updateProfitableSupplyAmount(802, 150);
 		
 		QueryBCP query = new QueryBCP();
-		String[] queryArgs = new String[]{Integer.toString(503)};
-		String[] queryArgs2 = new String[]{Integer.toString(101)+"-"+Integer.toString(503)};
+		String[] queryArgs = new String[]{Integer.toString(802)};
+
 
 		try {
-			String jsonStr = query.query("go_package8","queryByKey",queryArgs);
-			String jsonStr2 = query.query("go_package8","queryByKey",queryArgs2);
+			String jsonStr = query.query(chainCode,"queryByKey",queryArgs);
+			//String jsonStr2 = query.query(chainCode,"queryByKey",queryArgs2);
 			System.out.println(jsonStr);
-			System.out.println(jsonStr2);
+			//System.out.println(jsonStr2);
 		} catch (Exception e) {
 			
 			e.printStackTrace();

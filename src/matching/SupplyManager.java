@@ -16,48 +16,48 @@ public class SupplyManager {
 	private final static String chainCode = "gopackage1";
 
 	public static void main(String[] args) throws Exception{
-		int demandId = 102;
-		String name = "water";
+		int demandId = 901;
+		String name = "bread";
 		String category = "Food";
-		int amountNeeded = 700;
+		int amountNeeded = 120;
 		String unit = "kg";
 		int demanderId = 601;
 		int priority = 1;
-		double lat = 100;
-		double lon = 200;
+		double lat = 0;
+		double lon = 0;
 		Demand d2 = new Demand(demandId, name, category, amountNeeded, unit, demanderId, priority, lat, lon);
 
 		MatchResult result = d2.matchToSupply();
 
-		int orgID = 503;
-		System.out.println("****** Feedback process for org" + orgID + " starts:");	
-		List<Integer> feedbackList = result.getFeedbackOrgs(orgID);
-		System.out.println("-----" + orgID + " should get feedback from organizations: " + feedbackList + "\n");
-		
-		//print previous result
-		System.out.println("Previous score of org " + orgID + " is" + Organization.getScoreById(503));
-		
-		System.out.println("\nGrading in process...");
-		result.giveFeedback(demandId, 503, 5, 5, 5, 5, 5);
-		result.giveFeedback(demandId, 503, 3, 3, 3, 3, 3);
-		result.giveFeedback(demandId, 503, 4, 4, 4, 4, 4);
-		
-
-		
-		//verify result
-		String key = Integer.toString(demandId)+"-"+Integer.toString(503);
-		QueryBCP query = new QueryBCP();
-		String[] queryArgs = new String[]{key}; 
-
-		try {
-			Thread.sleep(10000);
-			String jsonStr = query.query(chainCode,"queryByKey", queryArgs);
-			System.out.println(jsonStr);			
-	   } catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		System.out.println("new score of org" + orgID + " is " + Organization.getScoreById(503));
+//		int orgID = 503;
+//		System.out.println("****** Feedback process for org" + orgID + " starts:");	
+//		List<Integer> feedbackList = result.getFeedbackOrgs(orgID);
+//		System.out.println("-----" + orgID + " should get feedback from organizations: " + feedbackList + "\n");
+//		
+//		//print previous result
+//		System.out.println("Previous score of org " + orgID + " is" + Organization.getScoreById(503));
+//		
+//		System.out.println("\nGrading in process...");
+//		result.giveFeedback(demandId, 503, 5, 5, 5, 5, 5);
+//		result.giveFeedback(demandId, 503, 3, 3, 3, 3, 3);
+//		result.giveFeedback(demandId, 503, 4, 4, 4, 4, 4);
+//		
+//
+//		
+//		//verify result
+//		String key = Integer.toString(demandId)+"-"+Integer.toString(503);
+//		QueryBCP query = new QueryBCP();
+//		String[] queryArgs = new String[]{key}; 
+//
+//		try {
+//			Thread.sleep(10000);
+//			String jsonStr = query.query(chainCode,"queryByKey", queryArgs);
+//			System.out.println(jsonStr);			
+//	   } catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		
+//		System.out.println("new score of org" + orgID + " is " + Organization.getScoreById(503));
 	}
 	
 	public SupplyManager() {
