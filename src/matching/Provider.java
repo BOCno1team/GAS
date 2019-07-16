@@ -7,7 +7,24 @@ import main.java.org.example.cfc.QueryBCP;
 public class Provider extends Organization {
 	private double defaultCoverRadius;
 
-	private final static String chainCode = "go_package8";
+	private final static String chainCode = "gopackage1";
+	
+	public static void main(String args[]){
+		//initOrganization(503, "sos", "demander", 31.2034, 121.4948, 5000);
+		//initOrganization(501, "RedCross", "provider", 34.37971, 108.80859, 1500);
+
+		
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[]{"501"};
+
+		try {
+			String jsonStr = query.query(chainCode,"queryByKey",queryArgs);
+			System.out.println(jsonStr);
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+	}
 	
 	public Provider(int orgId, String name, int score, int rank, String orgType, double defaultLat, double defaultLon,
 			double coverRadius) {

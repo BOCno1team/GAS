@@ -13,7 +13,7 @@ import main.java.org.example.cfc.QueryBCP;
  */
 public class SupplyManager {
 	//block chain connection profile
-	private final static String chainCode = "gopackage";
+	private final static String chainCode = "gopackage1";
 
 	public static void main(String[] args) throws Exception{
 		int demandId = 102;
@@ -51,7 +51,7 @@ public class SupplyManager {
 
 		try {
 			Thread.sleep(10000);
-			String jsonStr = query.query("go_package2","query", queryArgs);
+			String jsonStr = query.query(chainCode,"queryByKey", queryArgs);
 			System.out.println(jsonStr);			
 	   } catch (Exception e) {
 			e.printStackTrace();

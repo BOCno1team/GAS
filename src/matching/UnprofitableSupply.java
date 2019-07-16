@@ -5,7 +5,7 @@ import main.java.org.example.cfc.QueryBCP;
 
 public class UnprofitableSupply extends Supply {
 	//block chain connection profile
-	private final static String chainCode = "gopackage";
+	private final static String chainCode = "gopackage1";
 
 	public static void main(String[] args) {
 //		uplinkUnprofitableSupply(901, "water", 100, "L", 501);
@@ -22,10 +22,10 @@ public class UnprofitableSupply extends Supply {
 		String[] queryArgs3 = new String[]{Integer.toString(601)};
 
 		try {
-			String jsonStr = query.query("go_package8","queryByKey",queryArgs);
+			String jsonStr = query.query(chainCode,"queryByKey",queryArgs);
 			//System.out.println(jsonStr);
-			String jsonStr2 = query.query("go_package8","queryByKey", queryArgs2);
-			String jsonStr3 = query.query("go_package8","queryByKey", queryArgs3);
+			String jsonStr2 = query.query(chainCode,"queryByKey", queryArgs2);
+			String jsonStr3 = query.query(chainCode,"queryByKey", queryArgs3);
 			System.out.println(jsonStr);
 			System.out.println(jsonStr2);
 			System.out.println(jsonStr3);

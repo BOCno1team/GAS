@@ -114,7 +114,7 @@ public class DemandServlet extends HttpServlet {
 				item.put("amount", s.getAmount());
 				item.put("unit", s.getUnit());
 				item.put("unitPrice", ((ProfitableSupply) s).getUnitPrice());
-				item.put("supplierId", s.getProviderId());
+				item.put("providerId", s.getProviderId());
 				profitableArray.add(item);
 			}
 			

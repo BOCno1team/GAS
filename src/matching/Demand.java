@@ -20,7 +20,7 @@ public class Demand implements Comparable<Demand>, Serializable {
 	private double lat; // latitude of the destination in decimal degrees
 	private double lon; //longitude of the destination in decimal degrees
 
-	private final static String chainCode = "gopackage";
+	private final static String chainCode = "gopackage1";
 	private static final long serialVersionUID = 20190625050327L;
 
 	public static void main(String[] args) {

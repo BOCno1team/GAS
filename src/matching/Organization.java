@@ -20,7 +20,7 @@ public class Organization {
 	
 	
 	public static void main(String args[]){
-		initOrganization(601, "jamacia-government", 90, 4, "demander", 31.2034, 121.4948);
+
 		
 		QueryBCP query = new QueryBCP();
 		String[] queryArgs = new String[]{"601"};
