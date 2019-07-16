@@ -74,7 +74,7 @@ public class DemandServlet extends HttpServlet {
 			int amount = obj.getIntValue("amount");
 			String unit = obj.getString("unit");
 			
-			Demand demand = new Demand(id, name, category, amount, unit, demanderId, 0, 0, 10);
+			Demand demand = new Demand(id, name, category, amount, unit, 1, demanderId, 0, 0);
 			demandList.add(demand);
 			demand.uplinkDemand();
 		}

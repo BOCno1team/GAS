@@ -73,17 +73,17 @@ public class Organization {
 	}
 	
 	public static int getRankById(int id) {
-		QueryBCP query = new QueryBCP();
-		String[] queryArgs = new String[]{Integer.toString(id)};
-		int rank = -1;
-		try {
-			String jsonStr = query.query(chainCode,fcnName,queryArgs);
-			JSONObject json = JSONObject.parseObject(jsonStr);
-			rank = Integer.parseInt(json.getString("rank"));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return rank;
+//		QueryBCP query = new QueryBCP();
+//		String[] queryArgs = new String[]{Integer.toString(id)};
+//		int rank = -1;
+//		try {
+//			String jsonStr = query.query(chainCode,fcnName,queryArgs);
+//			JSONObject json = JSONObject.parseObject(jsonStr);
+//			rank = Integer.parseInt(json.getString("rank"));
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+		return 2;
 	}
 	
 	public static double[] getLocationById(int id) {
