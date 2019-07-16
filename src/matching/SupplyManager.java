@@ -205,7 +205,7 @@ public class SupplyManager {
 		JSONObject jsonObj = null;
 		int supplyId = 0;
 		String name = null;
-		int amount = 0;
+		double amount = 0;
 		String unit = null;
 		int providerId = 0;
 		int unitPrice = 0;
@@ -221,7 +221,7 @@ public class SupplyManager {
 				jsonObj = JSONObject.parseObject(jsonObj.getString("Record"));
 				supplyId = jsonObj.getIntValue("supplyID");
 				name = jsonObj.getString("name");
-				amount = jsonObj.getIntValue("amount");
+				amount = jsonObj.getDoubleValue("amount");
 				unit = jsonObj.getString("unit");
 				providerId = jsonObj.getIntValue("organization");
 				unitPrice = jsonObj.getIntValue("unitprice");
