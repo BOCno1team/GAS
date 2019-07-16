@@ -60,7 +60,7 @@ public class UnprofitableSupply extends Supply {
     public void uplinkUnprofitableSupply() {
     	InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(this.getSupplyId()),String.valueOf(this.getName()),
-						String.valueOf(this.getAmount()),String.valueOf(this.getUnit()), String.valueOf(this.getProviderId()), 
+						String.valueOf(this.getAmount()),String.valueOf(this.getUnit()), String.valueOf(this.getProviderId()), String.valueOf(this.getProviderRank()),
 						String.valueOf(this.getLat()), String.valueOf(this.getLon()), String.valueOf(this.getCoverRadius())};
 		try {
 			invoke.invoke(chainCode,"initUnprofitablesupply",invokeArgs);

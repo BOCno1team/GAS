@@ -2,7 +2,10 @@ package web.connection;
 
 import java.io.BufferedReader;
 
+import matching.Organization;
 import matching.ProfitableSupply;
+import matching.UnprofitableSupply;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -61,8 +64,13 @@ public class HelloServlet extends HttpServlet {
 			int amount = obj.getIntValue("amount");
 			String unit = obj.getString("unit");
 			double price = obj.getDoubleValue("unitPrice");
-			ProfitableSupply s = new ProfitableSupply(id, name, amount, unit, provider, price, 0, 0, 10);
-			s.uplinkProfitableSupply();
+			if (price == 0) {
+				UnprofitableSupply s = new UnprofitableSupply(id, name, amount, unit, provider, Organization.getRankById(provider), 0, 0, 10);
+				s.uplinkUnprofitableSupply();
+			} else {
+				ProfitableSupply s = new ProfitableSupply(id, name, amount, unit, provider, price, 0, 0, 10);
+				s.uplinkProfitableSupply();
+			}
 		}
 			
 		
