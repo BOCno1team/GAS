@@ -61,7 +61,7 @@ public class HelloServlet extends HttpServlet {
 			obj = array.getJSONObject(i);
 			String name = obj.getString("name");
 			int id = obj.getIntValue("supplyId");
-			int amount = obj.getIntValue("amount");
+			double amount = obj.getDoubleValue("amount");
 			String unit = obj.getString("unit");
 			double price = obj.getDoubleValue("unitPrice");
 			if (price == 0) {

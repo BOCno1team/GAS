@@ -19,6 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 
 import matching.Demand;
 import matching.MatchResult;
+import matching.Organization;
 import matching.ProfitableSupply;
 import matching.Supply;
 import matching.UnprofitableSupply;
@@ -105,6 +106,7 @@ public class DemandServlet extends HttpServlet {
 				item.put("amount", s.getAmount());
 				item.put("unit", s.getUnit());
 				item.put("providerId", s.getProviderId());
+				item.put("providerName", Organization.getNameById(s.getProviderId()));
 				unprofitableArray.add(item);
 			}
 						
@@ -116,6 +118,7 @@ public class DemandServlet extends HttpServlet {
 				item.put("unit", s.getUnit());
 				item.put("unitPrice", ((ProfitableSupply) s).getUnitPrice());
 				item.put("providerId", s.getProviderId());
+				item.put("providerName", Organization.getNameById(s.getProviderId()));
 				profitableArray.add(item);
 			}
 			
@@ -126,6 +129,7 @@ public class DemandServlet extends HttpServlet {
 				item.put("amount", s.getAmount());
 				item.put("unit", "USD");
 				item.put("providerId", s.getProviderId());
+				item.put("providerName", Organization.getNameById(s.getProviderId()));
 				fundArray.add(item);
 			}				
 		}

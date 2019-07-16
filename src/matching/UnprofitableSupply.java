@@ -17,16 +17,16 @@ public class UnprofitableSupply extends Supply {
 		
 		
 		QueryBCP query = new QueryBCP();
-		String[] queryArgs = new String[]{"101-503"};
-		String[] queryArgs2 = new String[]{Integer.toString(502)};
-		String[] queryArgs3 = new String[]{Integer.toString(601)};
+		//String[] queryArgs = new String[]{"101-503"};
+		String[] queryArgs2 = new String[]{Integer.toString(7654321)};
+		String[] queryArgs3 = new String[]{Integer.toString(654321)};
 
 		try {
-			String jsonStr = query.query(chainCode,"queryByKey",queryArgs);
+//			String jsonStr = query.query(chainCode,"queryByKey",queryArgs);
 			//System.out.println(jsonStr);
 			String jsonStr2 = query.query(chainCode,"queryByKey", queryArgs2);
 			String jsonStr3 = query.query(chainCode,"queryByKey", queryArgs3);
-			System.out.println(jsonStr);
+//			System.out.println(jsonStr);
 			System.out.println(jsonStr2);
 			System.out.println(jsonStr3);
 		} catch (Exception e) {

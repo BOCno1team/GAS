@@ -90,7 +90,7 @@ public class SupplyManager {
 				name = jsonObj.getString("name");
 				amount = jsonObj.getDoubleValue("amount");
 				unit = jsonObj.getString("unit");
-				providerId = jsonObj.getIntValue("organization");
+				providerId = jsonObj.getIntValue("providerID");
 				providerRank = Organization.getRankById(providerId);
 				lat = jsonObj.getDoubleValue("lat");
 				lon = jsonObj.getDoubleValue("lon");
@@ -120,7 +120,7 @@ public class SupplyManager {
 		double amount = 0;
 		String unit = null;
 		int providerId = 0;
-		int providerRank = 0;
+		int providerRank = 2;
 		double lat = 0;
 		double lon = 0;
 		double coverRadius = 0;
@@ -134,7 +134,7 @@ public class SupplyManager {
 				name = jsonObj.getString("name");
 				amount = jsonObj.getDoubleValue("amount");
 				unit = jsonObj.getString("unit");
-				providerId = jsonObj.getIntValue("organization");
+				providerId = jsonObj.getIntValue("providerID");
 				providerRank = Organization.getRankById(providerId);
 				lat = jsonObj.getDoubleValue("lat");
 				lon = jsonObj.getDoubleValue("lon");
@@ -209,7 +209,7 @@ public class SupplyManager {
 		String unit = null;
 		int providerId = 0;
 		int unitPrice = 0;
-		int providerRank = 0;
+		int providerRank = 2;
 		double lat = 0;
 		double lon = 0;
 		double coverRadius = 0;
@@ -223,10 +223,10 @@ public class SupplyManager {
 				name = jsonObj.getString("name");
 				amount = jsonObj.getDoubleValue("amount");
 				unit = jsonObj.getString("unit");
-				providerId = jsonObj.getIntValue("organization");
+				providerId = jsonObj.getIntValue("providerID");
 				unitPrice = jsonObj.getIntValue("unitprice");
-				//providerRank = Organization.getRankById(providerId);
-				providerRank = jsonObj.getIntValue("providerRank");
+				providerRank = Organization.getRankById(providerId);
+				//providerRank = jsonObj.getIntValue("providerRank");
 				lat = jsonObj.getDoubleValue("lat");
 				lon = jsonObj.getDoubleValue("lon");
 				coverRadius = jsonObj.getDoubleValue("coverRadius");	

@@ -72,6 +72,20 @@ public class Organization {
 		return orgType;
 	}
 	
+	public static String getNameById(int id) {
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[]{Integer.toString(id)};
+		String orgType=null;
+		try {
+			String jsonStr = query.query(chainCode,fcnName,queryArgs);
+			JSONObject json = JSONObject.parseObject(jsonStr);
+			orgType = json.getString("name");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return orgType;
+	}
+	
 	public static int getRankById(int id) {
 //		QueryBCP query = new QueryBCP();
 //		String[] queryArgs = new String[]{Integer.toString(id)};

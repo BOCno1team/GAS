@@ -19,7 +19,7 @@ public class MatchResult {
 	public static void main(String[] args) {
 		// initOneFeedback(501);
 
-		String key = Integer.toString(1) + "-" + Integer.toString(501);
+		String key = Integer.toString(901) + "-" + Integer.toString(503);
 		QueryBCP query = new QueryBCP();
 		String[] queryArgs = new String[] { key };
 
