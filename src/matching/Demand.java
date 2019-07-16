@@ -202,7 +202,7 @@ public class Demand implements Comparable<Demand>, Serializable {
 		}
 
 		MatchResult result = new MatchResult(this, unprofitableSupplyList, profitableSupplyList, fundList, sum);
-		result.prepareForFeedback();
+		//result.prepareForFeedback();
 		return result;
 	}
 

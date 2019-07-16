@@ -225,7 +225,8 @@ public class SupplyManager {
 				unit = jsonObj.getString("unit");
 				providerId = jsonObj.getIntValue("organization");
 				unitPrice = jsonObj.getIntValue("unitprice");
-				providerRank = Organization.getRankById(providerId);
+				//providerRank = Organization.getRankById(providerId);
+				providerRank = jsonObj.getIntValue("providerRank");
 				lat = jsonObj.getDoubleValue("lat");
 				lon = jsonObj.getDoubleValue("lon");
 				coverRadius = jsonObj.getDoubleValue("coverRadius");	
