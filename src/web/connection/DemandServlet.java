@@ -60,10 +60,11 @@ public class DemandServlet extends HttpServlet {
 		System.out.println(sb.toString());
 		JSONObject json = JSONObject.parseObject(sb.toString());
 		int demanderId = json.getIntValue("DemanderId");//需求方ID
-//		System.out.println(json.toJSONString());
+		System.out.println(demanderId);
 //		System.out.println(json.getString("newProvider"));
 //		//获取JSON中的内容，此处取id对应的内容
 		JSONArray array = JSONObject.parseArray(json.getString("demandFormList"));
+		System.out.println(array.size());
 		JSONObject obj = null;
 		List<Demand> demandList = new ArrayList<>();
 		for(int i = 0 ; i < array.size() ; i++){
