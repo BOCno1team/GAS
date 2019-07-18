@@ -23,7 +23,7 @@ public class Organization {
 
 		
 		QueryBCP query = new QueryBCP();
-		String[] queryArgs = new String[]{"601"};
+		String[] queryArgs = new String[]{"904"};
 
 		try {
 			String jsonStr = query.query(chainCode,"queryByKey",queryArgs);
@@ -52,8 +52,7 @@ public class Organization {
 				String.valueOf(grade), String.valueOf(rank), orgType, String.valueOf(lat), String.valueOf(lon)};
 		try {
 			invoke.invoke(chainCode,"initOrganization",invokeArgs);
-		} catch (Exception e) {
-			
+		} catch (Exception e) {	
 			e.printStackTrace();
 		}
 	}

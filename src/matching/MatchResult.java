@@ -1,8 +1,15 @@
 package matching;
-import java.util.ArrayList;
-import java.util.List;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Functions;
+import com.google.common.collect.Lists;
 
 import main.java.org.example.cfc.InvokeBCP;
 import main.java.org.example.cfc.QueryBCP;
@@ -41,8 +48,169 @@ public class MatchResult {
 		this.sumGethered = sumGethered;
 	}
 
+	void uplinkMatchResult() {
+		String key = this.demand.getDemandId() + "-" + "MatchResult";
+		JSONObject result = new JSONObject();
+
+		JSONArray unprofitableArray = new JSONArray();
+		JSONArray profitableArray = new JSONArray();
+		JSONArray fundArray = new JSONArray();
+		JSONArray demandArray = new JSONArray();
+
+		Demand demand = this.getDemand();
+		JSONObject jsonDemand = new JSONObject();
+		jsonDemand.put("demandId", demand.getDemandId());
+		jsonDemand.put("name", demand.getName());
+		jsonDemand.put("amount", demand.getAmountNeeded());
+		jsonDemand.put("unit", demand.getUnit());
+		jsonDemand.put("demanderId", demand.getDemanderId());
+
+		for (Supply s : this.getUnprofitableList()) {
+			JSONObject item = new JSONObject();
+			item.put("supplyId", s.getSupplyId());
+			item.put("name", s.getName());
+			item.put("amount", s.getAmount());
+			item.put("unit", s.getUnit());
+			item.put("providerId", s.getProviderId());
+			item.put("providerName", Organization.getNameById(s.getProviderId()));
+			unprofitableArray.add(item);
+		}
+
+		for (Supply s : this.getProfitableList()) {
+			JSONObject item = new JSONObject();
+			item.put("supplyId", s.getSupplyId());
+			item.put("name", s.getName());
+			item.put("amount", s.getAmount());
+			item.put("unit", s.getUnit());
+			item.put("unitPrice", ((ProfitableSupply) s).getUnitPrice());
+			item.put("providerId", s.getProviderId());
+			item.put("providerName", Organization.getNameById(s.getProviderId()));
+			profitableArray.add(item);
+		}
+
+		for (Supply s : this.getFundList()) {
+			JSONObject item = new JSONObject();
+			item.put("supplyId", s.getSupplyId());
+			item.put("name", "Fund");
+			item.put("amount", s.getAmount());
+			item.put("unit", "USD");
+			item.put("providerId", s.getProviderId());
+			item.put("providerName", Organization.getNameById(s.getProviderId()));
+			fundArray.add(item);
+		}
+
+		List<String> involvedOrgs = new ArrayList<>();
+		for (int orgId : this.getAllInvolvedOrg()) {
+			involvedOrgs.add(String.valueOf(orgId));
+		}
+		String orgListString = String.join(",", involvedOrgs);
+
+		result.put("Demand", jsonDemand);
+		result.put("UnprofitableSupplyList", unprofitableArray);
+		result.put("ProfitableSupplyList", profitableArray);
+		result.put("fundList", fundArray);
+		result.put("involvedOrgList", orgListString);
+
+		String resultString = JSONObject.toJSONString(result);
+		String[] invokeArgs = new String[] { key, resultString };
+
+		try {
+			InvokeBCP invoke = new InvokeBCP();
+			invoke.invoke(chainCode, "set", invokeArgs);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Update the list containing the demandIds that each organization participates
+	 * in.
+	 */
+	void updateOrgParticipationList() {
+		List<Integer> orgList = getAllInvolvedOrg();
+		for (int orgId : orgList) {
+			String key = orgId + "-ParticipationList";
+			QueryBCP query = new QueryBCP();
+			String[] queryArgs = new String[] { key };
+
+			try {
+				String jsonStr = query.query(chainCode, "queryByKey", queryArgs);
+				JSONObject json = JSONObject.parseObject(jsonStr);
+				JSONArray demandToSupply = json.getJSONArray("demandList");
+				List<Integer> supplyList;
+				String orgType = Organization.getTypeById(orgId);
+				if (orgType.equals("demander")) {
+					supplyList = new ArrayList<Integer>();
+				} else {
+					supplyList = getSupplyIdsForOrg(orgId);
+				}
+//				List<String> supplyStringList = new ArrayList<>();
+//				
+//				for (int Id : supplyList) {
+//					supplyStringList.add(""+Id);
+//				}
+//				String newListString = String.join(",", supplyStringList);
+				JSONArray jsonSupply = JSONArray.fromObject(supplyList);
+
+				JSONObject item = new JSONObject();
+				item.put("demandId", this.getDemand().getDemandId());
+				item.put("supplyList", jsonSupply);
+
+				demandToSupply.add(item);
+				json.put("demandList", demandToSupply);
+
+				String newJSONString = JSONObject.toJSONString(json);
+
+				String[] invokeArgs = new String[] { key, newJSONString };
+				InvokeBCP invoke = new InvokeBCP();
+				invoke.invoke(chainCode, "set", invokeArgs);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	static void giveMessage(int demandId, int orgId, String msg) {
+		String key = demandId + "-message";
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[] { key };
+		String separate = "\n";
+		try {
+			String jsonStr = query.query(chainCode, "queryByKey", queryArgs);
+			JSONObject json = JSONObject.parseObject(jsonStr);
+			JSONArray msgList = json.getJSONArray("msgList");
+//			for (int j = 0;j< msgList.size();j++){
+//                JSONObject cur = msgList.getJSONObject(j);
+//                if (cur.getIntValue("orgId") == orgId) {
+//                	String prevMsg = cur.getString("messages");
+//                	String newMsg = prevMsg + separate + msg;
+//                	cur.put("messages", newMsg);
+//                	//TODO delete & add again?
+//                	msgList.put(j, cur);
+//                }
+//           }
+			JSONObject newJSON = new JSONObject();
+			newJSON.put("orgId", orgId);
+			newJSON.put("message", msg);
+			msgList.add(newJSON);
+			
+			json.put("msgList", msgList);
+			
+			String newJSONString = JSONObject.toJSONString(json);
+
+			String[] invokeArgs = new String[] { key, newJSONString };
+			InvokeBCP invoke = new InvokeBCP();
+			invoke.invoke(chainCode, "set", invokeArgs);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * Give feedback to the organization with receiverId.
+	 * 
 	 * @param demandId
 	 * @param receiverId
 	 * @param grade1
@@ -51,13 +219,13 @@ public class MatchResult {
 	 * @param grade4
 	 * @param grade5
 	 */
-	void giveFeedback(int demandId, int receiverId, int grade1, int grade2, int grade3, int grade4, int grade5) {
-		String key = Integer.toString(demandId) + "-" + Integer.toString(receiverId);
+	void giveFeedback(int receiverId, int grade1, int grade2, int grade3, int grade4, int grade5) {
+		String key = this.getDemand().getDemandId() + "-" + Integer.toString(receiverId);
 		QueryBCP query = new QueryBCP();
 		String[] queryArgs = new String[] { key };
 
 		try {
-			String jsonStr = query.query("gopackage", "queryByKey", queryArgs);
+			String jsonStr = query.query(chainCode, "queryByKey", queryArgs);
 			JSONObject json = JSONObject.parseObject(jsonStr);
 			int sum1 = json.getIntValue("grade1");
 			int sum2 = json.getIntValue("grade2");
@@ -102,6 +270,7 @@ public class MatchResult {
 
 	/**
 	 * Get the IDs of organizations that orgId needs to give & get feedback.
+	 * 
 	 * @param orgId
 	 * @return
 	 */
@@ -122,6 +291,7 @@ public class MatchResult {
 
 	/**
 	 * Calculate the number of organizations that it needs to give & get feedback.
+	 * 
 	 * @param orgId
 	 * @return the number of organizations that it needs to give & get feedback.
 	 */
@@ -135,9 +305,28 @@ public class MatchResult {
 			initOneFeedback(orgId);
 		}
 	}
+	public void prepareForMessage() {
+		String key = this.getDemand().getDemandId() + "-message";
+		String[] invokeArgs = new String[] { key, newJSONString };
+		InvokeBCP invoke = new InvokeBCP();
+		invoke.invoke(chainCode, "set", invokeArgs);
+		
+		JSONArray msgList = new JSONArray();
+		JSONObject newJSON = new JSONObject();
+		
+		JSONObject newJSON = new JSONObject();
+
+		
+	}
+	
+	public void prepareForFollowUp() {
+		prepareForFeedback();
+		
+	}
 
 	/**
 	 * Initialize the grading data for the org with receiverID.
+	 * 
 	 * @param receiverId
 	 */
 	public void initOneFeedback(int receiverId) {
@@ -161,19 +350,20 @@ public class MatchResult {
 			InvokeBCP invoke = new InvokeBCP();
 			invoke.invoke(chainCode, "set", invokeArgs);
 		} catch (Exception e) {
-			
+
 			e.printStackTrace();
 		}
 	}
 
 	/**
 	 * Get the IDs of all the organizations involved in this transaction.
+	 * 
 	 * @return IDs of all the organizations involved in this transaction.
 	 */
 	private List<Integer> getAllInvolvedOrg() {
 		List<Integer> orgList = new ArrayList<>();
 		orgList.add(this.getDemand().getDemanderId());
-		
+
 		for (Supply s : unprofitableList) {
 			if (!orgList.contains(s.getProviderId())) {
 				orgList.add(s.getProviderId());
@@ -192,6 +382,28 @@ public class MatchResult {
 			}
 		}
 		return orgList;
+	}
+
+	/**
+	 * Assume the organization type for orgId is provider or executor.
+	 * 
+	 * @param orgId
+	 * @return
+	 */
+	private List<Integer> getSupplyIdsForOrg(int orgId) {
+		List<Supply> total = new ArrayList<>();
+		total.addAll(unprofitableList);
+		total.addAll(profitableList);
+		total.addAll(fundList);
+
+		List<Integer> result = new ArrayList<>();
+		for (Supply s : total) {
+			if (((Integer) s.getProviderId()).equals(orgId)) {
+				result.add(s.getSupplyId());
+			}
+		}
+
+		return result;
 	}
 
 	public Demand getDemand() {

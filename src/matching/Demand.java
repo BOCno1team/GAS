@@ -46,9 +46,9 @@ public class Demand implements Comparable<Demand>, Serializable {
 		System.out.println("Previous score of org " + orgID + " is" + Organization.getScoreById(503));
 		
 		System.out.println("\nGrading in process...");
-		result.giveFeedback(demandId, 503, 5, 5, 5, 5, 5);
-		result.giveFeedback(demandId, 503, 3, 3, 3, 3, 3);
-		result.giveFeedback(demandId, 503, 4, 4, 4, 4, 4);
+		result.giveFeedback(503, 5, 5, 5, 5, 5);
+		result.giveFeedback(503, 3, 3, 3, 3, 3);
+		result.giveFeedback(503, 4, 4, 4, 4, 4);
 	
 //		verify result
 //		String key = Integer.toString(demandId)+"-"+Integer.toString(503);
@@ -203,6 +203,7 @@ public class Demand implements Comparable<Demand>, Serializable {
 
 		MatchResult result = new MatchResult(this, unprofitableSupplyList, profitableSupplyList, fundList, sum);
 		result.prepareForFeedback();
+		result.updateOrgParticipationList();
 		return result;
 	}
 
