@@ -98,9 +98,18 @@ public class MatchResult {
 			item.put("providerName", Organization.getNameById(s.getProviderId()));
 			fundArray.add(item);
 		}
-
+		
+		JSONArray orgList = new JSONArray();
 		List<String> involvedOrgs = new ArrayList<>();
 		for (int orgId : this.getAllInvolvedOrg()) {
+			JSONObject orgToSupply = new JSONObject();
+			orgToSupply.put("orgId", orgId);
+			List<String> supplyList = this.getSupplyIdsForOrg(orgId);
+			
+			String supplyString = String.join(",", supplyList);
+			orgToSupply.put("supplyList", supplyString);
+			
+			orgList.add(orgToSupply);
 			involvedOrgs.add(String.valueOf(orgId));
 		}
 		String orgListString = String.join(",", involvedOrgs);
@@ -110,6 +119,7 @@ public class MatchResult {
 		result.put("ProfitableSupplyList", profitableArray);
 		result.put("fundList", fundArray);
 		result.put("involvedOrgList", orgListString);
+		result.put("orgToSupplyList", orgList);
 
 		String resultString = JSONObject.toJSONString(result);
 		String[] invokeArgs = new String[] { key, resultString };
@@ -137,24 +147,13 @@ public class MatchResult {
 				String jsonStr = query.query(chainCode, "queryByKey", queryArgs);
 				JSONObject json = JSONObject.parseObject(jsonStr);
 				JSONArray demandToSupply = json.getJSONArray("demandList");
-				List<Integer> supplyList;
-				String orgType = Organization.getTypeById(orgId);
-				if (orgType.equals("demander")) {
-					supplyList = new ArrayList<Integer>();
-				} else {
-					supplyList = getSupplyIdsForOrg(orgId);
-				}
-//				List<String> supplyStringList = new ArrayList<>();
-//				
-//				for (int Id : supplyList) {
-//					supplyStringList.add(""+Id);
-//				}
-//				String newListString = String.join(",", supplyStringList);
-				JSONArray jsonSupply = JSONArray.fromObject(supplyList);
+				
+				List<String> supplyList = getSupplyIdsForOrg(orgId);			
+				String newListString = String.join(",", supplyList);
 
 				JSONObject item = new JSONObject();
 				item.put("demandId", this.getDemand().getDemandId());
-				item.put("supplyList", jsonSupply);
+				item.put("supplyList", newListString);
 
 				demandToSupply.add(item);
 				json.put("demandList", demandToSupply);
@@ -194,15 +193,15 @@ public class MatchResult {
 			newJSON.put("orgId", orgId);
 			newJSON.put("message", msg);
 			msgList.add(newJSON);
-			
+
 			json.put("msgList", msgList);
-			
+
 			String newJSONString = JSONObject.toJSONString(json);
 
 			String[] invokeArgs = new String[] { key, newJSONString };
 			InvokeBCP invoke = new InvokeBCP();
 			invoke.invoke(chainCode, "set", invokeArgs);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -305,23 +304,22 @@ public class MatchResult {
 			initOneFeedback(orgId);
 		}
 	}
-	public void prepareForMessage() {
-		String key = this.getDemand().getDemandId() + "-message";
-		String[] invokeArgs = new String[] { key, newJSONString };
-		InvokeBCP invoke = new InvokeBCP();
-		invoke.invoke(chainCode, "set", invokeArgs);
-		
-		JSONArray msgList = new JSONArray();
-		JSONObject newJSON = new JSONObject();
-		
-		JSONObject newJSON = new JSONObject();
+//	public void prepareForMessage() {
+//		String key = this.getDemand().getDemandId() + "-message";
+//		String[] invokeArgs = new String[] { key, newJSONString };
+//		InvokeBCP invoke = new InvokeBCP();
+//		invoke.invoke(chainCode, "set", invokeArgs);
+//		
+//		JSONArray msgList = new JSONArray();
+//		JSONObject newJSON = new JSONObject();
+//		
+//		JSONObject newJSON = new JSONObject();
+//
+//		
+//	}
 
-		
-	}
-	
 	public void prepareForFollowUp() {
 		prepareForFeedback();
-		
 	}
 
 	/**
@@ -390,16 +388,20 @@ public class MatchResult {
 	 * @param orgId
 	 * @return
 	 */
-	private List<Integer> getSupplyIdsForOrg(int orgId) {
+	private List<String> getSupplyIdsForOrg(int orgId) {
 		List<Supply> total = new ArrayList<>();
 		total.addAll(unprofitableList);
 		total.addAll(profitableList);
 		total.addAll(fundList);
 
-		List<Integer> result = new ArrayList<>();
+		List<String> result = new ArrayList<>();
+		String orgType = Organization.getTypeById(orgId);
+		if (orgType.equals("demander")) {
+			return result;
+		}	
 		for (Supply s : total) {
 			if (((Integer) s.getProviderId()).equals(orgId)) {
-				result.add(s.getSupplyId());
+				result.add(""+s.getSupplyId());
 			}
 		}
 

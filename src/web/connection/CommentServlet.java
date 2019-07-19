@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,7 +13,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+
+import main.java.org.example.cfc.QueryBCP;
 
 /**
  * Servlet implementation class CommentServlet
@@ -19,6 +24,7 @@ import com.alibaba.fastjson.JSONObject;
 @WebServlet(description = "comment", urlPatterns = { "/comment" })
 public class CommentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private final static String chainCode = "gopackage1";
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -49,32 +55,69 @@ public class CommentServlet extends HttpServlet {
 		//将json字符串转换为json对象
 		System.out.println(sb.toString());
 		JSONObject json = JSONObject.parseObject(sb.toString());
+
 //		System.out.println(json.toJSONString());
 //		System.out.println(json.getString("newProvider"));
-//		//获取JSON中的内容，此处取id对应的内容
-//		JSONArray array = JSONObject.parseArray(sb.toString());
-//		JSONObject obj = null;
-//		for(int i = 0 ; i < array.size() ; i++){			
-//			obj = array.getJSONObject(i);
-//			obj.getString("provider");
-//		}
-
 		
+		int demandId = json.getIntValue("demandId");
+		String key = demandId + "-MatchResult";
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[] { key };
+		JSONArray resultArray = new JSONArray();
 		
-		//System.out.println(array.toString());
-		
-		//TODO
-		/**
-		 * 需要在这里加入各种处理逻辑，以前端JSON中获取的内容为输入，调用撮合算法或是信息发布等功能，
-		 * 并获取返回值（全部基于java对象进行操作）
-		 * */
-		
-		
-		//组织返回的内容
-		json = new JSONObject();
+		try {
+			String jsonStr = query.query(chainCode, "queryByKey", queryArgs);
+			JSONObject json1 = JSONObject.parseObject(jsonStr);
+			
+			
+			JSONArray orgToSupply = json1.getJSONArray("orgToSupplyList");
+					
+			for (int j = 0;j < orgToSupply.size(); j ++){
+				JSONObject orgInfo = new JSONObject();
+				JSONObject orgObject = orgToSupply.getJSONObject(j);
+				
+				String orgIdStr = orgObject.getString("orgId");
+				orgInfo.put("orgId", Integer.valueOf(orgIdStr));
+				
+				//query org info
+				String[] queryArgs2 = new String[] { orgIdStr };
+	            String jsonStr2 = query.query(chainCode, "queryByKey", queryArgs2);
+				JSONObject json2 = JSONObject.parseObject(jsonStr2);
+				String orgName = json2.getString("orgName");
+				String orgType = json2.getString("orgType");
+				orgInfo.put("orgName", orgName);
+				orgInfo.put("orgType", orgType);
+				
+				//query supply info
+				String[] supplyList = (orgObject.getString("supplyList")).split(",");
+				JSONArray supplyArray = new JSONArray();
+				for (String supplyId : supplyList) {
+					String[] queryArgs3 = new String[] { supplyId };
+		            String jsonStr3 = query.query(chainCode, "queryByKey", queryArgs3);
+					JSONObject json3 = JSONObject.parseObject(jsonStr3);
+					
+					JSONObject supply = new JSONObject();
+					String supplyName = json3.getString("name");
+					Double supplyAmount = json3.getDoubleValue("amount");
+					String unit = json3.getString("unit");
+					
+					supply.put("supplyName", supplyName);
+					supply.put("supplyAmount", supplyAmount);
+					supply.put("unit", unit);
+					supplyArray.add(supply);
+				}
+				
+				resultArray.add(orgInfo);
+			}	
+			
+			out.append(resultArray.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+				
 		json.put("res", "aaa");
 		//将JSON返回前端
-		out.append(json.toString());
+		//out.append(json.toString());
 	}
 
 	/**
