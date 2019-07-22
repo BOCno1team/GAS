@@ -14,17 +14,37 @@ public class ProfitableSupply extends Supply{
 //		uplinkProfitableSupply(1003, "water", 150, "L", 502, 3);
 //		uplinkProfitableSupply(803, "water", 100, "L", 501, 1);
 		
-		updateProfitableSupplyAmount(802, 150);
+//		updateProfitableSupplyAmount(802, 150);
+		
+		int id1 = 9003;
+		String name1 = "tent";
+		double amount1 = 200;
+		String unit1 = "per";
+		int provider1 = 503;
+		
+		
+		UnprofitableSupply s = new UnprofitableSupply(id1, name1, amount1, unit1, provider1, Organization.getRankById(provider1), 0, 0, 10);
+		s.uplinkUnprofitableSupply();
+
+		int id2 = 7001;
+		String name2 = "tent";
+		double amount2 = 50;
+		String unit2 = "per";
+		int provider2 = 501;
+		double price2 = 30;
+		ProfitableSupply s2 = new ProfitableSupply(id2, name2, amount2, unit2, provider2, price2, 0, 0, 10);
+		s2.uplinkProfitableSupply();
 		
 		QueryBCP query = new QueryBCP();
-		String[] queryArgs = new String[]{Integer.toString(802)};
+		String[] queryArgs = new String[]{Integer.toString(9003)};
+		String[] queryArgs2 = new String[]{Integer.toString(7001)};
 
 
 		try {
 			String jsonStr = query.query(chainCode,"queryByKey",queryArgs);
-			//String jsonStr2 = query.query(chainCode,"queryByKey",queryArgs2);
+			String jsonStr2 = query.query(chainCode,"queryByKey",queryArgs2);
 			System.out.println(jsonStr);
-			//System.out.println(jsonStr2);
+			System.out.println(jsonStr2);
 		} catch (Exception e) {
 			
 			e.printStackTrace();
