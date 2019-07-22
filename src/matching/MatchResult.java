@@ -169,6 +169,39 @@ public class MatchResult {
 			}
 		}
 	}
+	
+	/**
+	 * Confirm the work is finished by organization with orgID.
+	 */
+	public static void confirmOrgStatus(int demandId, int orgId) {
+		String key = demandId + orgId + "-status";
+		String[] invokeArgs = new String[] { key, "1" };
+		InvokeBCP invoke = new InvokeBCP();
+		try {
+			invoke.invoke(chainCode, "set", invokeArgs);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	}
+	
+	/**
+	 * Get contract status for the organization.
+	 */
+	public static int getOrgStatus(int demandId, int orgId) {
+		int status = 0;
+		
+		String key = demandId + orgId + "-status";
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[] { key };
+
+		try {
+			String statusStr = query.query(chainCode, "queryByKey", queryArgs);
+			status = Integer.valueOf(statusStr);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+		return status;
+	}
 
 	static void giveMessage(int demandId, int orgId, String msg) {
 		String key = demandId + "-message";
@@ -304,22 +337,39 @@ public class MatchResult {
 			initOneFeedback(orgId);
 		}
 	}
-//	public void prepareForMessage() {
-//		String key = this.getDemand().getDemandId() + "-message";
-//		String[] invokeArgs = new String[] { key, newJSONString };
-//		InvokeBCP invoke = new InvokeBCP();
-//		invoke.invoke(chainCode, "set", invokeArgs);
-//		
-//		JSONArray msgList = new JSONArray();
-//		JSONObject newJSON = new JSONObject();
-//		
-//		JSONObject newJSON = new JSONObject();
-//
-//		
-//	}
+	
+	/**
+	 * Initialize the message for this demand to an empty string on the chain.
+	 */
+	public void prepareForMessage() {
+		String key = this.getDemand().getDemandId() + "-message";
+		String[] invokeArgs = new String[] { key, "" };
+		InvokeBCP invoke = new InvokeBCP();
+		try {
+			invoke.invoke(chainCode, "set", invokeArgs);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	}
 
+	public void prepareForStatus() {
+		for (int orgId : getAllInvolvedOrg()) {
+			String key = this.getDemand().getDemandId() + orgId + "-status";
+			String[] invokeArgs = new String[] { key, "0" };
+			InvokeBCP invoke = new InvokeBCP();
+			try {
+				invoke.invoke(chainCode, "set", invokeArgs);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}	
+		}
+	}
+	
 	public void prepareForFollowUp() {
 		prepareForFeedback();
+		prepareForMessage();
+		prepareForStatus();
 	}
 
 	/**
