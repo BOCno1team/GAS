@@ -7,6 +7,9 @@ public class Supply implements Comparable<Supply>, Cloneable {
 	private String unit;
 	private int providerId;
 	private int providerRank;
+	/*
+	 * IBM location API could be applied here to get latitude & longitude info.
+	 */
 	private double lat; //latitude of the providing position in decimal degrees
 	private double lon; //Longitude of the providing position in decimal degrees
 	private double coverRadius; //in kilometer
@@ -42,6 +45,20 @@ public class Supply implements Comparable<Supply>, Cloneable {
 		}
 	}
 
+	@Override
+	public Object clone() {
+		Supply s = null;
+		try {
+			s = (Supply) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return s;
+	}
+	
+	/*
+	 * Getters and setters
+	 */
 	public int getProviderId() {
 		return providerId;
 	}
@@ -52,17 +69,6 @@ public class Supply implements Comparable<Supply>, Cloneable {
 
 	public void setSupplyId(int supplyId) {
 		this.supplyId = supplyId;
-	}
-
-	@Override
-	public Object clone() {
-		Supply s = null;
-		try {
-			s = (Supply) super.clone();
-		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
-		}
-		return s;
 	}
 	
 	public int getSupplyId() {

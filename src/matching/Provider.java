@@ -31,15 +31,12 @@ public class Provider extends Organization {
 		super(orgId, name, score, rank, orgType, defaultLat, defaultLon);
 		this.defaultCoverRadius = coverRadius;
 	}
-	
-	public double getDefaultCoverRadius() {
-		return defaultCoverRadius;
-	}
 
-	public void setDefaultCoverRadius(double defaultCoverRadius) {
-		this.defaultCoverRadius = defaultCoverRadius;
-	}
-
+	/**
+	 * Get cover radius from the chain using id.
+	 * @param id
+	 * @return
+	 */
 	public static double getCoverRadiusById(int id) {
 		QueryBCP query = new QueryBCP();
 		String[] queryArgs = new String[]{Integer.toString(id)};
@@ -54,6 +51,15 @@ public class Provider extends Organization {
 		return defaultCoverRadius;
 	}
 	
+	/**
+	 * Initialize an organization on the chain
+	 * @param orgId
+	 * @param name
+	 * @param orgType
+	 * @param lat
+	 * @param lon
+	 * @param coverRadius
+	 */
 	public static void initOrganization(int orgId, String name, String orgType, double lat, double lon, double coverRadius) {
 		InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(orgId), name, 
@@ -67,6 +73,11 @@ public class Provider extends Organization {
 		}
 	}
 	
+	/**
+	 * Reconstruct an organization from the chain by its id.
+	 * @param id
+	 * @return
+	 */
 	public static Organization queryOrgById(int id) {
 		QueryBCP query = new QueryBCP();
 		String[] queryArgs = new String[]{Integer.toString(id)};
@@ -98,6 +109,18 @@ public class Provider extends Organization {
 		
 		Provider org = new Provider(orgId, name, score, rank, orgType, lat, lon, coverRadius);
 		return org;
+	}
+	
+	
+	/*
+	 * Getters and setters
+	 */
+	public double getDefaultCoverRadius() {
+		return defaultCoverRadius;
+	}
+
+	public void setDefaultCoverRadius(double defaultCoverRadius) {
+		this.defaultCoverRadius = defaultCoverRadius;
 	}
 
 }

@@ -79,6 +79,9 @@ public class ProfitableSupply extends Supply{
 		this.unitPrice = unitPrice;
 	}
 	
+	/**
+	 * Initialize profitable supply on the chain
+	 */
 	public void uplinkProfitableSupply() {
 		InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(this.getSupplyId()),String.valueOf(this.getName()),
@@ -93,6 +96,18 @@ public class ProfitableSupply extends Supply{
 		}
 	}
 	
+	/**
+	 * Initialize profitable supply on the chain
+	 * @param supplyId
+	 * @param name
+	 * @param amount
+	 * @param unit
+	 * @param providerId
+	 * @param unitPrice
+	 * @param lat
+	 * @param lon
+	 * @param coverRadius
+	 */
 	public static void uplinkProfitableSupply(int supplyId, String name, int amount, String unit, int providerId, int unitPrice, double lat, double lon, double coverRadius) {
 		InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(supplyId), String.valueOf(name),
@@ -106,6 +121,11 @@ public class ProfitableSupply extends Supply{
 		}
 	}
 	
+	/**
+	 * Update the amount of profitable supply with supplyId.
+	 * @param supplyId
+	 * @param amount
+	 */
 	public static void updateProfitableSupplyAmount(int supplyId, int amount) {
 		InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(supplyId),String.valueOf(amount)};
@@ -117,7 +137,9 @@ public class ProfitableSupply extends Supply{
 		}
 	}
 	
-
+	/**
+	 * Update the amount of profitable supply with supplyId.
+	 */
 	public void updateProfitableSupplyAmount() {
 		InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(this.getSupplyId()),String.valueOf(this.getAmount())};

@@ -12,6 +12,8 @@ public class Organization {
 	private int score; // range from 0 to 100
 	private int rank;
 	private String orgType;
+	
+	//IBM location API could be applied here to get latitude & longitude info.
 	private double defaultLat;
 	private double defaultLon;
 	//block chain connection profile
@@ -45,11 +47,18 @@ public class Organization {
 		this.defaultLon = defaultLon;
 	}
 	
-	// change grade to default 50
-	public static void initOrganization(int orgId, String name, int grade, int rank, String orgType, double lat, double lon) {
+	/**
+	 * Initialize an organization on the chain.
+	 * @param orgId
+	 * @param name
+	 * @param orgType
+	 * @param lat
+	 * @param lon
+	 */
+	public static void initOrganization(int orgId, String name, String orgType, double lat, double lon) {
 		InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(orgId), name, 
-				String.valueOf(grade), String.valueOf(rank), orgType, String.valueOf(lat), String.valueOf(lon)};
+				String.valueOf(50), String.valueOf(2), orgType, String.valueOf(lat), String.valueOf(lon)};
 		try {
 			invoke.invoke(chainCode,"initOrganization",invokeArgs);
 		} catch (Exception e) {	
@@ -57,6 +66,11 @@ public class Organization {
 		}
 	}
 	
+	/**
+	 * Get the type of the organization with id
+	 * @param id
+	 * @return
+	 */
 	public static String getTypeById(int id) {
 		QueryBCP query = new QueryBCP();
 		String[] queryArgs = new String[]{Integer.toString(id)};
@@ -71,6 +85,11 @@ public class Organization {
 		return orgType;
 	}
 	
+	/**
+	 * Get name of the organization with id
+	 * @param id
+	 * @return
+	 */
 	public static String getNameById(int id) {
 		QueryBCP query = new QueryBCP();
 		String[] queryArgs = new String[]{Integer.toString(id)};
@@ -85,18 +104,23 @@ public class Organization {
 		return orgType;
 	}
 	
+	/**
+	 * Get rank of the organization with id
+	 * @param id
+	 * @return
+	 */
 	public static int getRankById(int id) {
-//		QueryBCP query = new QueryBCP();
-//		String[] queryArgs = new String[]{Integer.toString(id)};
-//		int rank = -1;
-//		try {
-//			String jsonStr = query.query(chainCode,fcnName,queryArgs);
-//			JSONObject json = JSONObject.parseObject(jsonStr);
-//			rank = Integer.parseInt(json.getString("rank"));
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-		return 2;
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[]{Integer.toString(id)};
+		int rank = -1;
+		try {
+			String jsonStr = query.query(chainCode,fcnName,queryArgs);
+			JSONObject json = JSONObject.parseObject(jsonStr);
+			rank = Integer.parseInt(json.getString("rank"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return rank;
 	}
 	
 	public static double[] getLocationById(int id) {
@@ -115,6 +139,11 @@ public class Organization {
 		return new double[] {lat, lon};
 	}
 	
+	/**
+	 * Get score of the organization with id
+	 * @param id
+	 * @return
+	 */
 	public static int getScoreById(int id) {
 		QueryBCP query = new QueryBCP();
 		String[] queryArgs = new String[]{Integer.toString(id)};
@@ -130,6 +159,11 @@ public class Organization {
 		return score;
 	}
 	
+	/**
+	 * Reconstruct a organization object by querying from the chain.
+	 * @param id
+	 * @return
+	 */
 	public static Organization queryOrgById(int id) {
 		QueryBCP query = new QueryBCP();
 		String[] queryArgs = new String[]{Integer.toString(id)};
@@ -161,7 +195,14 @@ public class Organization {
 		return org;
 	}
 	
-	//TODO: ?do we need toimplement for provider in Chaincode
+	/**
+	 * Update organization rank after receiving feedback from other organizations.
+	 * @param avg1
+	 * @param avg2
+	 * @param avg3
+	 * @param avg4
+	 * @param avg5
+	 */
 	public void updateOrganization(int avg1, int avg2, int avg3, int avg4, int avg5) {
 		InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(this.getOrgId()),
@@ -173,6 +214,10 @@ public class Organization {
 		}
 	}
 
+	
+	/*
+	 * Getters and setters
+	 */
 	public double getDefaultLat() {
 		return defaultLat;
 	}

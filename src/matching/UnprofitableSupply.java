@@ -57,6 +57,9 @@ public class UnprofitableSupply extends Supply {
 		super(supplyId, name, amount, unit, providerID, providerRank, lat, lon, coverRadius);
 	}
 
+	/**
+	 * Initialize an unprofitable supply on the chain
+	 */
     public void uplinkUnprofitableSupply() {
     	InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(this.getSupplyId()),String.valueOf(this.getName()),
@@ -70,6 +73,18 @@ public class UnprofitableSupply extends Supply {
 		}
 	}
     
+    /**
+     * Initialize an unprofitable supply on the chain
+     * @param supplyId
+     * @param name
+     * @param amount
+     * @param unit
+     * @param providerID
+     * @param providerRank
+     * @param lat
+     * @param lon
+     * @param coverRadius
+     */
     public static void uplinkUnprofitableSupply(int supplyId, String name, double amount, String unit, int providerID, int providerRank, double lat, double lon, double coverRadius) {
     	InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(supplyId),name,
@@ -83,6 +98,9 @@ public class UnprofitableSupply extends Supply {
 		}
 	}
 
+    /**
+     * Update the amount of unprofitable supply on the chain
+     */
 	public void updateUnprofitableSupplyAmount() {
 		InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(this.getSupplyId()),String.valueOf(this.getAmount())};
@@ -94,6 +112,11 @@ public class UnprofitableSupply extends Supply {
 		}
 	}
 	
+	/**
+	 * Update the amount of unprofitable supply with supplyId on the chain to amount
+	 * @param supplyId
+	 * @param amount
+	 */
 	public static void updateUnprofitableSupplyAmount(int supplyId, double amount) {
 		InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(supplyId),String.valueOf(amount)};

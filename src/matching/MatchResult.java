@@ -23,21 +23,6 @@ public class MatchResult {
 
 	private final static String chainCode = "gopackage1";
 
-	public static void main(String[] args) {
-		// initOneFeedback(501);
-
-		String key = Integer.toString(901) + "-" + Integer.toString(503);
-		QueryBCP query = new QueryBCP();
-		String[] queryArgs = new String[] { key };
-
-		try {
-			String jsonStr = query.query(chainCode, "queryByKey", queryArgs);
-			System.out.println(jsonStr);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	public MatchResult(Demand demand, List<Supply> unprofitableList, List<Supply> profitableList, List<Supply> fundList,
 			double sumGethered) {
 		super();
@@ -203,6 +188,12 @@ public class MatchResult {
 		return status;
 	}
 
+	/**
+	 * Organization with orgId gives a message for demand with demandId
+	 * @param demandId
+	 * @param orgId
+	 * @param msg
+	 */
 	static void giveMessage(int demandId, int orgId, String msg) {
 		String key = demandId + "-message";
 		QueryBCP query = new QueryBCP();
@@ -353,6 +344,9 @@ public class MatchResult {
 		}		
 	}
 
+	/**
+	 * Initialize status for organizations to confirm completion of the contract later
+	 */
 	public void prepareForStatus() {
 		for (int orgId : getAllInvolvedOrg()) {
 			String key = this.getDemand().getDemandId() + orgId + "-status";
@@ -458,6 +452,9 @@ public class MatchResult {
 		return result;
 	}
 
+	/*
+	 * Getters and setters
+	 */
 	public Demand getDemand() {
 		return demand;
 	}
@@ -496,5 +493,20 @@ public class MatchResult {
 
 	public void setSumGethered(double sumGethered) {
 		this.sumGethered = sumGethered;
+	}
+	
+	public static void main(String[] args) {
+		// initOneFeedback(501);
+
+		String key = Integer.toString(901) + "-" + Integer.toString(503);
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[] { key };
+
+		try {
+			String jsonStr = query.query(chainCode, "queryByKey", queryArgs);
+			System.out.println(jsonStr);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

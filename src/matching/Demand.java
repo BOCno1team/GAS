@@ -23,48 +23,6 @@ public class Demand implements Comparable<Demand>, Serializable {
 	private final static String chainCode = "gopackage1";
 	private static final long serialVersionUID = 20190625050327L;
 
-	public static void main(String[] args) {
-		int demandId = 101;
-		String name = "bread";
-		String category = "Food";
-		int amountNeeded = 400;
-		String unit = "kg";
-		int demanderId = 601;
-		int priority = 1;
-		double lat = 0;
-		double lon = 0;
-		Demand d1 = new Demand(demandId, name, category, amountNeeded, unit, priority, demanderId, lat, lon);
-
-		MatchResult result = d1.matchToSupply();
-
-		int orgID = 503;
-		System.out.println("****** Feedback process for org" + orgID + " starts ******");	
-		List<Integer> feedbackList = result.getFeedbackOrgs(orgID);
-		System.out.println("-----" + orgID + " should get feedback from organizations: " + feedbackList + "\n");
-		
-		//print previous result
-		System.out.println("Previous score of org " + orgID + " is" + Organization.getScoreById(503));
-		
-		System.out.println("\nGrading in process...");
-		result.giveFeedback(503, 5, 5, 5, 5, 5);
-		result.giveFeedback(503, 3, 3, 3, 3, 3);
-		result.giveFeedback(503, 4, 4, 4, 4, 4);
-	
-//		verify result
-//		String key = Integer.toString(demandId)+"-"+Integer.toString(503);
-//		QueryBCP query = new QueryBCP();
-//		String[] queryArgs = new String[]{key}; 
-
-		try {
-			Thread.sleep(100000);
-//			String jsonStr = query.query("go_package2","query", queryArgs);
-//			System.out.println(jsonStr);			
-	   } catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		System.out.println("new score of org" + orgID + " is " + Organization.getScoreById(503));
-	}
 
 	/*
 	 * The map that matches a category to its corresponding priority.
@@ -217,6 +175,18 @@ public class Demand implements Comparable<Demand>, Serializable {
 		return 0;
 	}
 	
+	/**
+	 * Initialize demand on the chain
+	 * @param demandId
+	 * @param name
+	 * @param category
+	 * @param amount
+	 * @param unit
+	 * @param demanderId
+	 * @param priority
+	 * @param lat
+	 * @param lon
+	 */
 	public static void uplinkDemand(int demandId, String name, String category, int amount, String unit, int demanderId, int priority, double lat, double lon) {
     	InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(demandId),name, category, 
@@ -230,6 +200,9 @@ public class Demand implements Comparable<Demand>, Serializable {
 		}
 	}
 	
+	/**
+	 * Initialize demand on the chain
+	 */
 	public void uplinkDemand() {
     	InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(demandId),name, category, 
@@ -243,6 +216,11 @@ public class Demand implements Comparable<Demand>, Serializable {
 		}
 	}
 	
+	/**
+	 * Update the demand amount to amount.
+	 * @param demandId
+	 * @param amount
+	 */
 	public static void updateDemandAmount(int demandId, double amount) {
 		InvokeBCP invoke = new InvokeBCP();
 		String[] invokeArgs = new String[]{String.valueOf(demandId),String.valueOf(amount)};
@@ -253,7 +231,9 @@ public class Demand implements Comparable<Demand>, Serializable {
 		}
 	}
 
-	// The getters and setters
+	/*
+	 *  The getters and setters
+	 */
 	public int getDemanderId() {
 		return demanderId;
 	}
@@ -332,5 +312,48 @@ public class Demand implements Comparable<Demand>, Serializable {
 
 	public void setLon(double lon) {
 		this.lon = lon;
+	}
+	
+	public static void main(String[] args) {
+		int demandId = 101;
+		String name = "bread";
+		String category = "Food";
+		int amountNeeded = 400;
+		String unit = "kg";
+		int demanderId = 601;
+		int priority = 1;
+		double lat = 0;
+		double lon = 0;
+		Demand d1 = new Demand(demandId, name, category, amountNeeded, unit, priority, demanderId, lat, lon);
+
+		MatchResult result = d1.matchToSupply();
+
+		int orgID = 503;
+		System.out.println("****** Feedback process for org" + orgID + " starts ******");	
+		List<Integer> feedbackList = result.getFeedbackOrgs(orgID);
+		System.out.println("-----" + orgID + " should get feedback from organizations: " + feedbackList + "\n");
+		
+		//print previous result
+		System.out.println("Previous score of org " + orgID + " is" + Organization.getScoreById(503));
+		
+		System.out.println("\nGrading in process...");
+		result.giveFeedback(503, 5, 5, 5, 5, 5);
+		result.giveFeedback(503, 3, 3, 3, 3, 3);
+		result.giveFeedback(503, 4, 4, 4, 4, 4);
+	
+//		verify result
+//		String key = Integer.toString(demandId)+"-"+Integer.toString(503);
+//		QueryBCP query = new QueryBCP();
+//		String[] queryArgs = new String[]{key}; 
+
+		try {
+			Thread.sleep(100000);
+//			String jsonStr = query.query("go_package2","query", queryArgs);
+//			System.out.println(jsonStr);			
+	   } catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("new score of org" + orgID + " is " + Organization.getScoreById(503));
 	}
 }
