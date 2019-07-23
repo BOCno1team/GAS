@@ -123,7 +123,7 @@ public class DemandServlet extends HttpServlet {
 				profitableArray.add(item);
 			}
 			
-			for (Supply s : result.getProfitableList()) {
+			for (Supply s : result.getFundList()) {
 				JSONObject item = new JSONObject();
 				item.put("supplyId",s.getSupplyId());
 				item.put("name", "Fund");
