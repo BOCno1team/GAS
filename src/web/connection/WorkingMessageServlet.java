@@ -52,11 +52,16 @@ public class WorkingMessageServlet extends HttpServlet {
 		//将json字符串转换为json对象
 		System.out.println(sb.toString());
 		JSONObject json = JSONObject.parseObject(sb.toString());
-
+		String userId = json.getString("userID");
+		String message = json.getString("message");
 //		System.out.println(json.toJSONString());
 //		System.out.println(json.getString("newProvider"));		
 				
+		//组织返回的内容
+		json = new JSONObject();
 		json.put("res", "success");
+		//将JSON返回前端
+		out.append(json.toString());
 	}
 
 	/**
