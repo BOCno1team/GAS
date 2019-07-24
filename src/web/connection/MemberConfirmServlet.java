@@ -53,7 +53,6 @@ public class MemberConfirmServlet extends HttpServlet {
 		int demandId = json.getIntValue("id");
 		int userId = json.getIntValue("userID");
 		
-		
 		MatchResult.confirmOrgStatus(demandId, userId);
 		//组织返回的内容
 		json = new JSONObject();

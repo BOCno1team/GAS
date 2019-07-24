@@ -519,15 +519,17 @@ public class MatchResult {
 	public static void main(String[] args) {
 		// initOneFeedback(501);
 
-		String key = Integer.toString(901) + "-" + Integer.toString(503);
-		QueryBCP query = new QueryBCP();
-		String[] queryArgs = new String[] { key };
-
-		try {
-			String jsonStr = query.query(chainCode, "queryByKey", queryArgs);
-			System.out.println(jsonStr);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		String key = Integer.toString(901) + "-" + Integer.toString(503);
+//		QueryBCP query = new QueryBCP();
+//		String[] queryArgs = new String[] { key };
+//
+//		try {
+//			String jsonStr = query.query(chainCode, "queryByKey", queryArgs);
+//			System.out.println(jsonStr);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+		
+		System.out.println(MatchResult.queryOrgList(9001));
 	}
 }

@@ -70,13 +70,20 @@ public class WorkingMessageServlet extends HttpServlet {
 		for (String orgStrId : orgStrList) {
 			int orgId = Integer.valueOf(orgStrId);
 			JSONObject orgIdAndName = new JSONObject();
-			orgIdAndName.put("orgId", orgId);
 			
-			String orgName = Organization.getNameById(orgId);
-			orgIdAndName.put("orgName", orgName);
 			
 			String orgType = Organization.getTypeById(orgId);
 			orgIdAndName.put("orgType", orgType);
+			
+			String orgName = Organization.getNameById(orgId);
+			if (orgType == "Demander") {
+				orgIdAndName.put("demanderName", orgName);
+				orgIdAndName.put("demanderId", orgId);
+			} else {
+				orgIdAndName.put("orgName", orgName);
+				orgIdAndName.put("orgId", orgId);
+			}
+				
 			orgList.add(orgIdAndName);
 		}
 		
