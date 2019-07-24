@@ -80,8 +80,6 @@ public class Util {
 	public static UserContext readUserContext(String affiliation, String username) throws Exception {
 		String filePath = "users/" + affiliation + "/" + username + ".ser";		
 		File file = new File(filePath);
-		System.out.println("path "+file.getAbsolutePath());
-		System.out.println("exist: "+file.exists());
 		if (file.exists()) {
 			// Reading the object from a file
 			FileInputStream fileStream = new FileInputStream(filePath);

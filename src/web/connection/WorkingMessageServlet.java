@@ -70,13 +70,12 @@ public class WorkingMessageServlet extends HttpServlet {
 		for (String orgStrId : orgStrList) {
 			int orgId = Integer.valueOf(orgStrId);
 			JSONObject orgIdAndName = new JSONObject();
-			
-			
+					
 			String orgType = Organization.getTypeById(orgId);
 			orgIdAndName.put("orgType", orgType);
 			
 			String orgName = Organization.getNameById(orgId);
-			if (orgType == "Demander") {
+			if (orgType.equals("demander")) {
 				orgIdAndName.put("demanderName", orgName);
 				orgIdAndName.put("demanderId", orgId);
 			} else {
@@ -89,6 +88,7 @@ public class WorkingMessageServlet extends HttpServlet {
 		
 		json.put("orgList", orgList);
 		//将JSON返回前端
+		System.out.println(json.toString());
 		out.append(json.toString());
 	}
 
