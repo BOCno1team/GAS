@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import main.java.org.example.cfc.QueryBCP;
 import matching.Demand;
 import matching.MatchResult;
+import matching.Organization;
 
 /**
  * Servlet implementation class WorkingMessageServlet
@@ -62,7 +65,20 @@ public class WorkingMessageServlet extends HttpServlet {
 		MatchResult.giveMessage(demandId, userId, message);
 		//组织返回的内容
 		json = new JSONObject();
-		json.put("res", "success");
+		String[] orgStrList= MatchResult.queryOrgList(demandId);
+		JSONArray orgList = new JSONArray();
+		for (String orgStrId : orgStrList) {
+			int orgId = Integer.valueOf(orgStrId);
+			JSONObject orgIdAndName = new JSONObject();
+			orgIdAndName.put("orgId", orgId);
+			
+			String orgName = Organization.getNameById(orgId);
+			orgIdAndName.put("orgName", orgName);
+			
+			orgList.add(orgIdAndName);
+		}
+		
+		json.put("orgList", orgList);
 		//将JSON返回前端
 		out.append(json.toString());
 	}

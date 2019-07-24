@@ -311,6 +311,8 @@ public class MatchResult {
 
 		return result;
 	}
+	
+	
 
 	/**
 	 * Calculate the number of organizations that it needs to give & get feedback.
@@ -450,6 +452,25 @@ public class MatchResult {
 		}
 
 		return result;
+	}
+	
+	public static String[] queryOrgList(int demandId) {
+		String key = demandId + "-" + "MatchResult";
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[] { key };
+		String jsonStr = "";
+		
+		try {
+			jsonStr = query.query(chainCode, "queryByKey", queryArgs);
+			System.out.println(jsonStr);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		JSONObject json = JSONObject.parseObject(jsonStr);
+		String orgListString = json.getString("involvedOrgList");
+		String[] orgList = orgListString.split(",");	
+		return orgList;
 	}
 
 	/*
