@@ -33,7 +33,7 @@ public class MatchResult {
 		this.sumGethered = sumGethered;
 	}
 
-	void uplinkMatchResult() {
+	public void uplinkMatchResult() {
 		String key = this.demand.getDemandId() + "-" + "MatchResult";
 		JSONObject result = new JSONObject();
 

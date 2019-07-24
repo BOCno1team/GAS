@@ -25,7 +25,7 @@ public class Organization {
 
 		
 		QueryBCP query = new QueryBCP();
-		String[] queryArgs = new String[]{"904"};
+		String[] queryArgs = new String[]{"9001"};
 
 		try {
 			String jsonStr = query.query(chainCode,"queryByKey",queryArgs);

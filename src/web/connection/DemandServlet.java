@@ -79,7 +79,7 @@ public class DemandServlet extends HttpServlet {
 			Demand demand = new Demand(id, name, category, amount, unit, 1, demanderId, 0, 0);
 			demandList.add(demand);
 			//TODO: uplink demand.
-			//demand.uplinkDemand();
+			demand.uplinkDemand();
 		}
 		
 		JSONArray unprofitableArray = new JSONArray();
@@ -90,6 +90,8 @@ public class DemandServlet extends HttpServlet {
 		Collections.sort(demandList);
 		for (Demand d : demandList) {
 			MatchResult result = d.matchToSupply();
+			result.uplinkMatchResult();
+			
 			Demand demand = result.getDemand();
 			
 			JSONObject jsonDemand = new JSONObject();
