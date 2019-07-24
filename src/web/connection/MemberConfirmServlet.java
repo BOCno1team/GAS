@@ -11,24 +11,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
-import main.java.org.example.cfc.QueryBCP;
-import matching.Demand;
 import matching.MatchResult;
 
 /**
- * Servlet implementation class WorkingMessageServlet
+ * Servlet implementation class MemberConfirmServlet
  */
-@WebServlet("/WorkingMessageServlet")
-public class WorkingMessageServlet extends HttpServlet {
+@WebServlet("/MemberConfirmServlet")
+public class MemberConfirmServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public WorkingMessageServlet() {
+    public MemberConfirmServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -55,10 +52,10 @@ public class WorkingMessageServlet extends HttpServlet {
 		System.out.println(sb.toString());
 		JSONObject json = JSONObject.parseObject(sb.toString());
 		int demandId = json.getIntValue("id");
+		int userId = json.getIntValue("userID");
 		String message = json.getString("content");
-//		System.out.println(json.toJSONString());
-//		System.out.println(json.getString("newProvider"));		
-		int userId = Integer.valueOf(Demand.getDemanderIdById(demandId));
+		
+		
 		MatchResult.giveMessage(demandId, userId, message);
 		//组织返回的内容
 		json = new JSONObject();

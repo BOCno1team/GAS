@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONObject;
+
 import main.java.org.example.cfc.InvokeBCP;
 import main.java.org.example.cfc.QueryBCP;
 
@@ -230,7 +232,25 @@ public class Demand implements Comparable<Demand>, Serializable {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * Query demander ID given demand ID.
+	 * @param id
+	 * @return
+	 */
+	public static String getDemanderIdById(int id) {
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[]{Integer.toString(id)};
+		String orgType=null;
+		try {
+			String jsonStr = query.query(chainCode,"queryByKey",queryArgs);
+			JSONObject json = JSONObject.parseObject(jsonStr);
+			orgType = json.getString("demanderId");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return orgType;
+	}
 	/*
 	 *  The getters and setters
 	 */
