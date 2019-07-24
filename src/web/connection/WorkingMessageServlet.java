@@ -75,6 +75,8 @@ public class WorkingMessageServlet extends HttpServlet {
 			String orgName = Organization.getNameById(orgId);
 			orgIdAndName.put("orgName", orgName);
 			
+			String orgType = Organization.getTypeById(orgId);
+			orgIdAndName.put("orgType", orgType);
 			orgList.add(orgIdAndName);
 		}
 		

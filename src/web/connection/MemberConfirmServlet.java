@@ -27,7 +27,6 @@ public class MemberConfirmServlet extends HttpServlet {
      */
     public MemberConfirmServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -53,10 +52,9 @@ public class MemberConfirmServlet extends HttpServlet {
 		JSONObject json = JSONObject.parseObject(sb.toString());
 		int demandId = json.getIntValue("id");
 		int userId = json.getIntValue("userID");
-		String message = json.getString("content");
 		
 		
-		MatchResult.giveMessage(demandId, userId, message);
+		MatchResult.confirmOrgStatus(demandId, userId);
 		//组织返回的内容
 		json = new JSONObject();
 		json.put("res", "success");
