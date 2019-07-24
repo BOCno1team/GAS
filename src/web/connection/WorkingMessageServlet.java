@@ -57,7 +57,7 @@ public class WorkingMessageServlet extends HttpServlet {
 		//将json字符串转换为json对象
 		System.out.println(sb.toString());
 		JSONObject json = JSONObject.parseObject(sb.toString());
-		int demandId = json.getIntValue("id");
+		int demandId = Integer.valueOf(json.getString("goodsId"));
 		String message = json.getString("content");
 //		System.out.println(json.toJSONString());
 //		System.out.println(json.getString("newProvider"));		
