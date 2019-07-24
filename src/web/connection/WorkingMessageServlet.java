@@ -15,6 +15,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import main.java.org.example.cfc.QueryBCP;
+import matching.MatchResult;
 
 /**
  * Servlet implementation class WorkingMessageServlet
@@ -52,11 +53,13 @@ public class WorkingMessageServlet extends HttpServlet {
 		//将json字符串转换为json对象
 		System.out.println(sb.toString());
 		JSONObject json = JSONObject.parseObject(sb.toString());
-		String userId = json.getString("userID");
+		int demandId = json.getIntValue("demandId");
+		int userId = json.getIntValue("userID");
 		String message = json.getString("message");
 //		System.out.println(json.toJSONString());
 //		System.out.println(json.getString("newProvider"));		
-				
+		
+		MatchResult.giveMessage(demandId, userId, message);
 		//组织返回的内容
 		json = new JSONObject();
 		json.put("res", "success");

@@ -194,7 +194,7 @@ public class MatchResult {
 	 * @param orgId
 	 * @param msg
 	 */
-	static void giveMessage(int demandId, int orgId, String msg) {
+	public static void giveMessage(int demandId, int orgId, String msg) {
 		String key = demandId + "-message";
 		QueryBCP query = new QueryBCP();
 		String[] queryArgs = new String[] { key };
