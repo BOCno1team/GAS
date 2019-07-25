@@ -17,6 +17,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import main.java.org.example.cfc.QueryBCP;
+import matching.Organization;
 
 /**
  * Servlet implementation class CommentServlet
@@ -115,7 +116,7 @@ public class CommentServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 				
-		json.put("res", "aaa");
+		json.put("resultArray", resultArray);
 		//将JSON返回前端
 		//out.append(json.toString());
 	}
