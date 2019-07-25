@@ -17,6 +17,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import main.java.org.example.cfc.QueryBCP;
+import matching.Demand;
 import matching.Organization;
 
 /**
@@ -91,8 +92,13 @@ public class CommentServlet extends HttpServlet {
 				
 				//query supply info
 				String supplyListString = orgObject.getString("supplyList");
-				if (supplyListString.equals("")) {
-					break;
+				if (supplyListString.equals("")) {//Demander
+					String demandName = Demand.getNameById(demandId);
+					String amount = Demand.getAmountById(demandId);
+					orgInfo.put("demandName", demandName);
+					orgInfo.put("demandAmount", amount);
+					resultArray.add(orgInfo);
+					continue;
 				}
 				String[] supplyList = supplyListString.split(",");
 				JSONArray supplyArray = new JSONArray();
@@ -111,18 +117,19 @@ public class CommentServlet extends HttpServlet {
 					supply.put("unit", unit);
 					supplyArray.add(supply);
 				}
+				orgInfo.put("supplies", supplyArray);
 				
 				resultArray.add(orgInfo);
 			}	
 			
-			out.append(resultArray.toString());
+			//out.append(resultArray.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 				
 		json.put("resultArray", resultArray);
 		//将JSON返回前端
-		//out.append(json.toString());
+		out.append(json.toString());
 	}
 
 	/**

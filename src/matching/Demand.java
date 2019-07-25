@@ -251,6 +251,34 @@ public class Demand implements Comparable<Demand>, Serializable {
 		}
 		return orgType;
 	}
+	
+	public static String getNameById(int id) {
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[]{Integer.toString(id)};
+		String orgType=null;
+		try {
+			String jsonStr = query.query(chainCode,"queryByKey",queryArgs);
+			JSONObject json = JSONObject.parseObject(jsonStr);
+			orgType = json.getString("name");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return orgType;
+	}
+	
+	public static String getAmountById(int id) {
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[]{Integer.toString(id)};
+		String orgType=null;
+		try {
+			String jsonStr = query.query(chainCode,"queryByKey",queryArgs);
+			JSONObject json = JSONObject.parseObject(jsonStr);
+			orgType = json.getString("amount");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return orgType;
+	}
 	/*
 	 *  The getters and setters
 	 */
