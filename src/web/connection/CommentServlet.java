@@ -90,7 +90,11 @@ public class CommentServlet extends HttpServlet {
 				orgInfo.put("orgType", orgType);
 				
 				//query supply info
-				String[] supplyList = (orgObject.getString("supplyList")).split(",");
+				String supplyListString = orgObject.getString("supplyList");
+				if (supplyListString.equals("")) {
+					break;
+				}
+				String[] supplyList = supplyListString.split(",");
 				JSONArray supplyArray = new JSONArray();
 				for (String supplyId : supplyList) {
 					String[] queryArgs3 = new String[] { supplyId };
