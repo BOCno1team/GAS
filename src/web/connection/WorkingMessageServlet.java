@@ -62,6 +62,7 @@ public class WorkingMessageServlet extends HttpServlet {
 //		System.out.println(json.toJSONString());
 //		System.out.println(json.getString("newProvider"));		
 		int userId = Integer.valueOf(Demand.getDemanderIdById(demandId));
+		System.out.println(demandId+" "+ message +" "+userId);
 		MatchResult.giveMessage(demandId, userId, message);
 		//组织返回的内容
 		json = new JSONObject();
@@ -75,16 +76,21 @@ public class WorkingMessageServlet extends HttpServlet {
 			orgIdAndName.put("orgType", orgType);
 			
 			String orgName = Organization.getNameById(orgId);
-			if (orgType.equals("demander")) {
-				orgIdAndName.put("demanderName", orgName);
-				orgIdAndName.put("demanderId", orgId);
-			} else {
-				orgIdAndName.put("orgName", orgName);
-				orgIdAndName.put("orgId", orgId);
-			}
+//			if (orgType.equals("demander")) {
+//				orgIdAndName.put("demanderName", orgName);
+//				orgIdAndName.put("demanderId", orgId);
+//			} else {
+			orgIdAndName.put("orgName", orgName);
+			orgIdAndName.put("orgId", orgId);
+			//}
 				
 			orgList.add(orgIdAndName);
 		}
+		JSONObject mockExecutor = new JSONObject();
+		mockExecutor.put("orgType", "executor");
+		mockExecutor.put("orgId", "301");
+		mockExecutor.put("orgName", "dumpExcutor");
+		orgList.add(mockExecutor);
 		
 		json.put("orgList", orgList);
 		//将JSON返回前端
