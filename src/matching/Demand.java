@@ -252,33 +252,63 @@ public class Demand implements Comparable<Demand>, Serializable {
 		return orgType;
 	}
 	
+	/**
+	 * Query demand object name given demand ID.
+	 * @param id
+	 * @return
+	 */
 	public static String getNameById(int id) {
 		QueryBCP query = new QueryBCP();
 		String[] queryArgs = new String[]{Integer.toString(id)};
-		String orgType=null;
+		String name=null;
 		try {
 			String jsonStr = query.query(chainCode,"queryByKey",queryArgs);
 			JSONObject json = JSONObject.parseObject(jsonStr);
-			orgType = json.getString("name");
+			name = json.getString("name");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return orgType;
+		return name;
 	}
 	
+	/**
+	 * Query amount needed given demand ID.
+	 * @param id
+	 * @return
+	 */
 	public static String getAmountById(int id) {
 		QueryBCP query = new QueryBCP();
 		String[] queryArgs = new String[]{Integer.toString(id)};
-		String orgType=null;
+		String amount=null;
 		try {
 			String jsonStr = query.query(chainCode,"queryByKey",queryArgs);
 			JSONObject json = JSONObject.parseObject(jsonStr);
-			orgType = json.getString("amount");
+			amount = json.getString("amount");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return orgType;
+		return amount;
 	}
+	
+	/**
+	 * Query unit given demand ID.
+	 * @param id
+	 * @return
+	 */
+	public static String getUnitById(int id) {
+		QueryBCP query = new QueryBCP();
+		String[] queryArgs = new String[]{Integer.toString(id)};
+		String unit=null;
+		try {
+			String jsonStr = query.query(chainCode,"queryByKey",queryArgs);
+			JSONObject json = JSONObject.parseObject(jsonStr);
+			unit = json.getString("unit");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return unit;
+	}
+	
 	/*
 	 *  The getters and setters
 	 */

@@ -95,6 +95,7 @@ public class CommentServlet extends HttpServlet {
 				if (supplyListString.equals("")) {//Demander
 					String demandName = Demand.getNameById(demandId);
 					String amount = Demand.getAmountById(demandId);
+					String unit = Demand.getUnitById(demandId);
 					orgInfo.put("demandName", demandName);
 					orgInfo.put("demandAmount", amount);
 					resultArray.add(orgInfo);
